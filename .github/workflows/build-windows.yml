@@ -1,13 +1,12 @@
 name: Build LabQC Windows EXE
 
 on:
-  workflow_dispatch:  # Manual trigger from Actions tab
+  workflow_dispatch:
   push:
     paths:
       - 'backend/**'
       - 'run_labqc.py'
       - 'requirements.txt'
-      - 'labqc.spec'
       - 'frontend/dist/**'
 
 jobs:
@@ -22,20 +21,44 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt pyinstaller
+        run: |
+          pip install -r requirements.txt pyinstaller
 
-      - name: Build frontend (if needed)
+      - name: Build frontend
         shell: pwsh
         run: |
-          if (!(Test-Path "frontend/dist/index.html")) {
-            cd frontend
-            npm install
-            npx vite build --base=/
-            cd ..
-          }
+          cd frontend
+          npm install
+          npx vite build --base=/
+          cd ..
 
       - name: Build EXE with PyInstaller
-        run: pyinstaller labqc.spec --noconfirm
+        run: |
+          pyinstaller --onedir --name LabQC --console `
+            --add-data "frontend/dist;frontend_dist" `
+            --hidden-import "backend" `
+            --hidden-import "backend.main" `
+            --hidden-import "backend.db.database" `
+            --hidden-import "backend.auth" `
+            --hidden-import "backend.routers.auth" `
+            --hidden-import "backend.routers.qc" `
+            --hidden-import "backend.routers.sigma" `
+            --hidden-import "backend.routers.validation" `
+            --hidden-import "backend.routers.audit" `
+            --hidden-import "backend.routers.lots" `
+            --hidden-import "backend.routers.rag" `
+            --hidden-import "backend.routers.eqa" `
+            --hidden-import "backend.routers.lis" `
+            --hidden-import "backend.routers.settings" `
+            --hidden-import "backend.models.qc_models" `
+            --hidden-import "backend.models.sigma_models" `
+            --hidden-import "backend.models.validation_models" `
+            --hidden-import "backend.models.audit_models" `
+            --hidden-import "backend.models.lot_models" `
+            --hidden-import "backend.models.eqa_models" `
+            --hidden-import "backend.models.settings_models" `
+            --hidden-import "backend.services.lis_parser" `
+            run_labqc.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
