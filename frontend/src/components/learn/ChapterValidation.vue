@@ -268,8 +268,8 @@ import PlotlyLinearityDiagram from './PlotlyLinearityDiagram.vue'
     </table>
 
     <div class="info-box">
-      <strong>OpenQC tip:</strong> The Validation module allows you to select the type of study (LOD, Precision,
-      Linearity), upload your dataset, and define custom acceptance criteria. OpenQC performs the statistical
+      <strong>LabQC tip:</strong> The Validation module allows you to select the type of study (LOD, Precision,
+      Linearity), upload your dataset, and define custom acceptance criteria. LabQC performs the statistical
       analysis and generates a validation report that can be included directly in your assay validation documentation.
     </div>
   </div>

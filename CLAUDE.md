@@ -1,4 +1,4 @@
-# OpenQC -- AI Agent Guide
+# LabQC -- AI Agent Guide
 
 Start with `docs/AI-ROUTING.md` for the routing table.
 
@@ -29,7 +29,7 @@ After completing any refactoring, bug fix batch, or feature implementation, run 
 
 1. Stage and commit changes:
    ```bash
-   cd D:/SOFTWARE_Projects_LP/OpenQC
+   cd D:/SOFTWARE_Projects_LP/LabQC
    git add -A && git commit -m "<describe changes>"
    ```
 

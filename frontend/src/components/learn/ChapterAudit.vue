@@ -4,7 +4,7 @@
 <template>
   <div class="learn-content">
     <h1>Chapter 5: Audit Trail and Regulatory Compliance</h1>
-    <p class="chapter-subtitle">How OpenQC ensures data integrity through cryptographic audit trails.</p>
+    <p class="chapter-subtitle">How LabQC ensures data integrity through cryptographic audit trails.</p>
 
     <h2>Why Audit Trails Matter</h2>
     <p>
@@ -50,7 +50,7 @@
 
     <h2>SHA-256 File Hashing Explained</h2>
     <p>
-      OpenQC uses <strong>SHA-256</strong> (Secure Hash Algorithm, 256-bit) to create a unique digital fingerprint
+      LabQC uses <strong>SHA-256</strong> (Secure Hash Algorithm, 256-bit) to create a unique digital fingerprint
       of every audit trail entry. SHA-256 is a cryptographic hash function that takes any input data and produces a
       fixed-length, 256-bit (64 hexadecimal character) output.
     </p>
@@ -95,7 +95,7 @@
 
     <h2>Hash Chain Integrity</h2>
     <p>
-      OpenQC does not just hash individual entries — it creates a <strong>hash chain</strong> where each entry's
+      LabQC does not just hash individual entries — it creates a <strong>hash chain</strong> where each entry's
       hash includes the hash of the previous entry. This creates an unbreakable chronological chain similar to
       blockchain technology.
     </p>
@@ -129,13 +129,13 @@
     </p>
     <p>
       To successfully tamper with the audit trail, an attacker would need to recompute the hashes of the modified
-      entry and <em>every subsequent entry</em> in the chain. OpenQC's verification process detects this by
+      entry and <em>every subsequent entry</em> in the chain. LabQC's verification process detects this by
       recomputing the entire chain from scratch and comparing against the stored hashes.
     </p>
 
     <h2>Tamper Detection</h2>
     <p>
-      OpenQC provides built-in tamper detection that can be run at any time:
+      LabQC provides built-in tamper detection that can be run at any time:
     </p>
     <ol>
       <li>The system retrieves all audit trail entries in chronological order.</li>
@@ -145,7 +145,7 @@
     </ol>
 
     <div class="warning-box">
-      <strong>What happens when tampering is detected:</strong> OpenQC displays a clear warning identifying
+      <strong>What happens when tampering is detected:</strong> LabQC displays a clear warning identifying
       which entry in the chain has been compromised. The laboratory should immediately investigate, document the
       finding, and report it to the quality manager. Any patient results associated with the tampered period should
       be reviewed.
@@ -154,7 +154,7 @@
     <h2>Regulatory Export</h2>
     <p>
       During regulatory audits and accreditation inspections, auditors need access to complete, verifiable audit
-      trails. OpenQC supports exporting audit trail data in formats suitable for regulatory review:
+      trails. LabQC supports exporting audit trail data in formats suitable for regulatory review:
     </p>
     <ul>
       <li>

@@ -49,7 +49,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/openqc/'),
+  history: createWebHistory('/labqc/'),
   routes,
 })
 

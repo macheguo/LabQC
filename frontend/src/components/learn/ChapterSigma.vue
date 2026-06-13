@@ -132,7 +132,7 @@ import PlotlyNMEDxDiagram from './PlotlyNMEDxDiagram.vue'
     />
 
     <p>
-      The NMEDx chart in OpenQC color-codes each plotted method according to its Sigma band, making it immediately
+      The NMEDx chart in LabQC color-codes each plotted method according to its Sigma band, making it immediately
       clear which assays are performing well and which need attention.
     </p>
 
@@ -187,7 +187,7 @@ import PlotlyNMEDxDiagram from './PlotlyNMEDxDiagram.vue'
     </table>
 
     <div class="info-box">
-      <strong>Practical tip:</strong> When OpenQC calculates the Sigma metric for your assay, it automatically
+      <strong>Practical tip:</strong> When LabQC calculates the Sigma metric for your assay, it automatically
       recommends the appropriate QC rules and control strategy based on the table above. Use the Sigma Analysis
       module to evaluate each assay in your laboratory.
     </div>

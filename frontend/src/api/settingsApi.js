@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = '/openqc'
+const BASE_URL = '/labqc'
 
 // ── AI Config ──────────────────────────────────────────────
 

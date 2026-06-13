@@ -9,7 +9,7 @@ import ChapterWestgard from '@/components/learn/ChapterWestgard.vue'
 import ChapterSigma from '@/components/learn/ChapterSigma.vue'
 import ChapterValidation from '@/components/learn/ChapterValidation.vue'
 import ChapterAudit from '@/components/learn/ChapterAudit.vue'
-import ChapterUsingOpenQC from '@/components/learn/ChapterUsingOpenQC.vue'
+import ChapterUsingLabQC from '@/components/learn/ChapterUsingLabQC.vue'
 import ChapterExamples from '@/components/learn/ChapterExamples.vue'
 import ChapterExperimentDesign from '@/components/learn/ChapterExperimentDesign.vue'
 
@@ -23,7 +23,7 @@ const chapters = computed(() => [
   { id: 'sigma', number: 3, title: t('learn.chapterList.sigma'), component: ChapterSigma },
   { id: 'validation', number: 4, title: t('learn.chapterList.validation'), component: ChapterValidation },
   { id: 'audit', number: 5, title: t('learn.chapterList.audit'), component: ChapterAudit },
-  { id: 'using-openqc', number: 6, title: t('learn.chapterList.usingOpenQC'), component: ChapterUsingOpenQC },
+  { id: 'using-openqc', number: 6, title: t('learn.chapterList.usingLabQC'), component: ChapterUsingLabQC },
   { id: 'examples', number: 7, title: t('learn.chapterList.examples'), component: ChapterExamples },
   { id: 'experiment-design', number: 8, title: t('learn.chapterList.experimentDesign'), component: ChapterExperimentDesign },
 ])

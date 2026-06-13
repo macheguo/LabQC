@@ -61,7 +61,7 @@ import PlotlyLJDiagram from './PlotlyLJDiagram.vue'
 
     <h2>The Six Westgard Rules</h2>
     <p>
-      OpenQC evaluates the following six rules in the order shown. The first rule (<strong>1-2s</strong>) is a warning
+      LabQC evaluates the following six rules in the order shown. The first rule (<strong>1-2s</strong>) is a warning
       that triggers evaluation of the remaining rejection rules.
     </p>
 
@@ -266,7 +266,7 @@ import PlotlyLJDiagram from './PlotlyLJDiagram.vue'
     </ol>
     <p>
       This sequential approach minimizes false rejections while maintaining high sensitivity to real analytical errors.
-      OpenQC implements this exact evaluation order automatically when analyzing uploaded QC data.
+      LabQC implements this exact evaluation order automatically when analyzing uploaded QC data.
     </p>
 
     <h2>When to Reject a Run vs. Investigate</h2>

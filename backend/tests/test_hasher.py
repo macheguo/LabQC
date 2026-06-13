@@ -27,7 +27,7 @@ class TestHashFile:
 
 class TestHashString:
     def test_consistent_sha256(self) -> None:
-        text = "OpenQC"
+        text = "LabQC"
         expected = hashlib.sha256(text.encode("utf-8")).hexdigest()
         assert hash_string(text) == expected
 

@@ -3,12 +3,12 @@
 
 <template>
   <div class="learn-content">
-    <h1>Chapter 6: Using OpenQC — Step by Step</h1>
+    <h1>Chapter 6: Using LabQC — Step by Step</h1>
     <p class="chapter-subtitle">Detailed walkthroughs for every module in the application.</p>
 
     <h2>QC Monitor Walkthrough</h2>
     <p>
-      The QC Monitor is the core module of OpenQC. It accepts raw QC data files, performs Westgard rule evaluation,
+      The QC Monitor is the core module of LabQC. It accepts raw QC data files, performs Westgard rule evaluation,
       generates Levey-Jennings charts, and produces QC reports.
     </p>
 
@@ -19,7 +19,7 @@
     <ul>
       <li>Click the upload area or drag and drop a file onto it.</li>
       <li><strong>Supported formats:</strong> <code>.xlsx</code> (Excel) files exported from PCR instruments such as QuantStudio, Bio-Rad CFX, Roche LightCycler, or similar platforms.</li>
-      <li>The file must contain columns for sample identifiers and Ct values. OpenQC automatically detects common column naming conventions.</li>
+      <li>The file must contain columns for sample identifiers and Ct values. LabQC automatically detects common column naming conventions.</li>
       <li><strong>Example file to use:</strong> <code>sample_qc_quantstudio.xlsx</code> from the sample data directory.</li>
     </ul>
 
@@ -42,7 +42,7 @@
 
     <h3>Step 3: Click Upload and Analyze</h3>
     <p>
-      Click the upload button to submit the file. OpenQC will:
+      Click the upload button to submit the file. LabQC will:
     </p>
     <ol>
       <li>Parse the Excel file and extract Ct values for each control level.</li>
@@ -119,7 +119,7 @@
 
     <h3>Step 2: Click Calculate</h3>
     <p>
-      Click the Calculate button. OpenQC applies the Sigma formula: <code>sigma = (TEa - |Bias|) / CV</code>.
+      Click the Calculate button. LabQC applies the Sigma formula: <code>sigma = (TEa - |Bias|) / CV</code>.
     </p>
 
     <h3>Step 3: Read the Results Table</h3>
@@ -145,7 +145,7 @@
 
     <h3>Step 5: Follow Recommended QC Rules</h3>
     <p>
-      Based on the calculated Sigma value, OpenQC recommends a QC strategy:
+      Based on the calculated Sigma value, LabQC recommends a QC strategy:
     </p>
     <ul>
       <li>Which Westgard rules to apply.</li>
@@ -189,7 +189,7 @@
 
     <h3>Step 4: Run Validation</h3>
     <p>
-      Click the validate button. OpenQC performs the appropriate statistical analysis based on the selected study type.
+      Click the validate button. LabQC performs the appropriate statistical analysis based on the selected study type.
     </p>
 
     <h3>Step 5: Interpret Results</h3>

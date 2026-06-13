@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = '/openqc'
+const BASE_URL = '/labqc'
 
 export async function fetchAuditLog(params = {}) {
   const query = new URLSearchParams(params).toString()

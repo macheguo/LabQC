@@ -1,4 +1,4 @@
-"""Generate sample Excel files for testing OpenQC end-to-end."""
+"""Generate sample Excel files for testing LabQC end-to-end."""
 import random
 from pathlib import Path
 from openpyxl import Workbook

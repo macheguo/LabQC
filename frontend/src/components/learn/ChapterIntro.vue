@@ -153,7 +153,7 @@ Ct value vs. Target concentration:
     </table>
 
     <div class="info-box">
-      <strong>Bottom line:</strong> QC is the bridge between analytical measurement and clinical trust. OpenQC
+      <strong>Bottom line:</strong> QC is the bridge between analytical measurement and clinical trust. LabQC
       automates the statistical evaluation, charting, and documentation so that laboratory professionals can focus
       on interpretation and patient care.
     </div>

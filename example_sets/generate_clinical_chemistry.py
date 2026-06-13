@@ -868,7 +868,7 @@ def generate_linearity_creatinine():
 # ===================================================================
 def main():
     print("=" * 60)
-    print("OpenQC Multi-Discipline Example Data Generator")
+    print("LabQC Multi-Discipline Example Data Generator")
     print("=" * 60)
     print()
     print(f"Output directory: {BASE_DIR}")

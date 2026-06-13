@@ -4,7 +4,7 @@
 <template>
   <div class="learn-content">
     <h1>Chapter 8: Designing Experiments &amp; Generating Reports</h1>
-    <p class="chapter-subtitle">A practical guide for laboratory scientists using OpenQC.</p>
+    <p class="chapter-subtitle">A practical guide for laboratory scientists using LabQC.</p>
 
     <!-- ============================================================ -->
     <!-- Section 1: Planning Your QC Program                          -->
@@ -138,7 +138,7 @@
     <!-- ============================================================ -->
     <h2>2. Preparing QC Data Files</h2>
     <p>
-      OpenQC accepts Excel (<code>.xlsx</code>) files exported from PCR instruments and clinical analyzers. The
+      LabQC accepts Excel (<code>.xlsx</code>) files exported from PCR instruments and clinical analyzers. The
       system supports three file format profiles:
     </p>
 
@@ -177,7 +177,7 @@
       <li>Open the experiment in QuantStudio Design &amp; Analysis software.</li>
       <li>Go to <strong>Export</strong> &gt; <strong>Results</strong>.</li>
       <li>Select <code>.xlsx</code> format and save.</li>
-      <li>The exported file is directly compatible with the QuantStudio format in OpenQC.</li>
+      <li>The exported file is directly compatible with the QuantStudio format in LabQC.</li>
     </ol>
 
     <p><strong>Bio-Rad CFX Manager:</strong></p>
@@ -185,13 +185,13 @@
       <li>Open the run in CFX Manager.</li>
       <li>Go to <strong>Export</strong> &gt; <strong>Quantification Cq Results</strong>.</li>
       <li>Save as <code>.xlsx</code>.</li>
-      <li>Use the Bio-Rad CFX format in OpenQC.</li>
+      <li>Use the Bio-Rad CFX format in LabQC.</li>
     </ol>
 
     <p><strong>Roche LightCycler:</strong></p>
     <ol>
       <li>Export the analysis results as <code>.xlsx</code> from the LightCycler software.</li>
-      <li>Use the <strong>Generic format</strong> in OpenQC and map the columns manually (sample name, target, Ct/Cp value).</li>
+      <li>Use the <strong>Generic format</strong> in LabQC and map the columns manually (sample name, target, Ct/Cp value).</li>
     </ol>
 
     <p><strong>Clinical Chemistry Analyzers:</strong></p>
@@ -211,7 +211,7 @@
     <h3>Column Mapping for Generic Format</h3>
     <p>
       When using the Generic format, you specify which columns in your file correspond to the required fields.
-      OpenQC reads your column headers and allows you to map them:
+      LabQC reads your column headers and allows you to map them:
     </p>
     <ul>
       <li><strong>Sample column:</strong> The column containing sample or control identifiers.</li>
@@ -262,12 +262,12 @@
       <li><strong>Register the new lot</strong> in the Lot Registry with the lot number, manufacturer, material type, and expiration date.</li>
       <li><strong>Run the new lot in parallel</strong> with the old lot for at least 5 runs (ideally 20 for full mean/SD establishment).</li>
       <li><strong>Establish new mean and SD</strong> from the parallel data for the new lot.</li>
-      <li><strong>Switch over</strong> to the new lot and mark the lot change in OpenQC.</li>
+      <li><strong>Switch over</strong> to the new lot and mark the lot change in LabQC.</li>
       <li><strong>Document the transition</strong> including parallel testing results and the date of switch.</li>
     </ol>
 
     <div class="info-box">
-      <strong>OpenQC behavior:</strong> OpenQC automatically resets Westgard rule evaluation history at lot
+      <strong>LabQC behavior:</strong> LabQC automatically resets Westgard rule evaluation history at lot
       boundaries. This prevents carryover violations from the previous lot's data influencing the new lot's
       evaluation. Historical data for the old lot is preserved for review.
     </div>
@@ -280,7 +280,7 @@
     <h3>For RT-PCR / Molecular Assays</h3>
     <ol>
       <li>Export QC data from your instrument software (QuantStudio, CFX Manager, or other) as <code>.xlsx</code>.</li>
-      <li>Open <strong>QC Monitor</strong> in OpenQC.</li>
+      <li>Open <strong>QC Monitor</strong> in LabQC.</li>
       <li>Upload the file by clicking the upload area or dragging the file onto it.</li>
       <li>Enter the metadata: instrument name, assay name, fluorescence channel, reagent lot ID, and control lot ID.</li>
       <li>Click <strong>Upload and Analyze</strong>.</li>
@@ -291,7 +291,7 @@
 
     <h3>For Clinical Chemistry</h3>
     <p>
-      The workflow is identical to the RT-PCR flow above. Note that in OpenQC, the value field (labeled "Ct Value"
+      The workflow is identical to the RT-PCR flow above. Note that in LabQC, the value field (labeled "Ct Value"
       in the interface) holds the measured concentration or activity value for clinical chemistry analytes. The
       Westgard evaluation and Levey-Jennings charting work the same way regardless of whether the value represents
       a Ct, a concentration in mg/dL, or an enzyme activity in U/L.
@@ -390,7 +390,7 @@
         reflects total method variation.
       </li>
       <li>
-        <strong>Using the Precision module in OpenQC:</strong> Upload your precision study data and OpenQC will
+        <strong>Using the Precision module in LabQC:</strong> Upload your precision study data and LabQC will
         calculate intra-run and inter-run CV automatically.
       </li>
     </ul>
@@ -519,8 +519,8 @@
     </pre>
 
     <div class="info-box">
-      <strong>OpenQC tip:</strong> Upload your validation study data to the <strong>Validation</strong> module.
-      Select the study type (LOD, Precision, or Linearity), define your acceptance criteria, and OpenQC will
+      <strong>LabQC tip:</strong> Upload your validation study data to the <strong>Validation</strong> module.
+      Select the study type (LOD, Precision, or Linearity), define your acceptance criteria, and LabQC will
       perform the statistical analysis and generate a validation report suitable for regulatory submission.
     </div>
 
@@ -529,7 +529,7 @@
     <!-- ============================================================ -->
     <h2>7. Generating Reports</h2>
     <p>
-      OpenQC provides several report types to support routine QC review, management oversight, and regulatory
+      LabQC provides several report types to support routine QC review, management oversight, and regulatory
       compliance.
     </p>
 
@@ -606,7 +606,7 @@
     <!-- ============================================================ -->
     <h2>8. Maintaining Audit Trail Integrity</h2>
     <p>
-      The audit trail is your laboratory's proof that data has not been altered after the fact. OpenQC uses a
+      The audit trail is your laboratory's proof that data has not been altered after the fact. LabQC uses a
       SHA-256 hash chain to ensure that every action is recorded immutably and in sequence.
     </p>
 
@@ -630,7 +630,7 @@
     <ol>
       <li>Navigate to the <strong>Audit Trail</strong> view.</li>
       <li>Click <strong>Verify Chain</strong> (or "Verify Integrity").</li>
-      <li>OpenQC recomputes every hash in the chain from scratch and compares against stored hashes.</li>
+      <li>LabQC recomputes every hash in the chain from scratch and compares against stored hashes.</li>
       <li>A green confirmation indicates the chain is intact. A red warning identifies the exact entry where the chain was broken.</li>
     </ol>
 

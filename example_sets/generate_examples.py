@@ -2,7 +2,7 @@
 """
 generate_examples.py
 ====================
-Generates all example Excel data files for the OpenQC project.
+Generates all example Excel data files for the LabQC project.
 
 These files contain realistic QC, validation, and sigma metric data
 for common molecular diagnostic assays (SARS-CoV-2, HIV-1, HBV, HCV, TB/MTB)
@@ -866,7 +866,7 @@ def generate_sigma_inputs():
 # ===================================================================
 def main():
     print("=" * 60)
-    print("OpenQC Example Data Generator")
+    print("LabQC Example Data Generator")
     print("=" * 60)
     print()
     print(f"Output directory: {BASE_DIR}")

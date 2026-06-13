@@ -1,4 +1,4 @@
-"""Integration smoke tests for OpenQC API."""
+"""Integration smoke tests for LabQC API."""
 import sys
 from pathlib import Path
 
@@ -59,7 +59,7 @@ class TestHealthCheck:
         assert response.status_code == 200
         data = response.json()
         assert data["status"] == "ok"
-        assert data["app"] == "OpenQC"
+        assert data["app"] == "LabQC"
 
 
 # ---------------------------------------------------------------------------

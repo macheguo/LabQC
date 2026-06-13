@@ -1,4 +1,4 @@
-# OpenQC
+# LabQC
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Python 3.12+](https://img.shields.io/badge/Python-3.12+-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
@@ -73,8 +73,8 @@ An open-source alternative to Westgard Green Belt + Black Belt for PCR diagnosti
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/ashuein/OpenQC.git
-cd OpenQC
+git clone https://github.com/ashuein/LabQC.git
+cd LabQC
 ```
 
 ### 2. Install backend dependencies
@@ -102,7 +102,7 @@ Open two terminals from the project root:
 uvicorn backend.main:app --reload --port 8000
 ```
 
-The database (`backend/data/openqc.db`) is created automatically on first startup.
+The database (`backend/data/labqc.db`) is created automatically on first startup.
 
 **Terminal 2 — Frontend dev server:**
 ```bash
@@ -153,7 +153,7 @@ With the backend running, visit http://localhost:8000/docs for the interactive S
 ## Project Structure
 
 ```
-OpenQC/
+LabQC/
 ├── backend/
 │   ├── main.py              # FastAPI app entry point
 │   ├── routers/             # API endpoint handlers

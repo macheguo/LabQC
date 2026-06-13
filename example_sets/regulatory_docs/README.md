@@ -58,9 +58,9 @@ This folder is a placeholder for regulatory and standards documents relevant to 
 
 ---
 
-## How These Documents Relate to OpenQC Modules
+## How These Documents Relate to LabQC Modules
 
-| Document | OpenQC Module |
+| Document | LabQC Module |
 |----------|--------------|
 | ISO 15189 (Section 7.3) | QC Monitor (IQC requirements) |
 | CLSI EP17-A2 | Validation: LOD/LOQ studies |
@@ -76,7 +76,7 @@ This folder is a placeholder for regulatory and standards documents relevant to 
 
 ## Usage
 
-Place downloaded PDF files directly in this folder. The OpenQC application can reference these documents in generated validation reports and SOP cross-references.
+Place downloaded PDF files directly in this folder. The LabQC application can reference these documents in generated validation reports and SOP cross-references.
 
 Suggested file naming convention:
 ```

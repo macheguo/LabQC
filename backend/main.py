@@ -1,5 +1,5 @@
 """
-OpenQC API -- FastAPI application entry point.
+LabQC API -- FastAPI application entry point.
 
 Configures CORS, registers all module routers, and exposes a root
 health-check endpoint.  No business logic lives here.
@@ -23,7 +23,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(
-    title="OpenQC API",
+    title="LabQC API",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -57,4 +57,4 @@ app.include_router(settings.router)
 @app.get("/")
 def root() -> dict:
     """Simple health-check endpoint."""
-    return {"status": "ok", "app": "OpenQC"}
+    return {"status": "ok", "app": "LabQC"}

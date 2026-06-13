@@ -4,16 +4,16 @@
 <template>
   <div class="learn-content">
     <h1>Chapter 7: Example Datasets Reference</h1>
-    <p class="chapter-subtitle">A complete guide to the sample files included with OpenQC and what to expect from each.</p>
+    <p class="chapter-subtitle">A complete guide to the sample files included with LabQC and what to expect from each.</p>
 
     <h2>Overview</h2>
     <p>
-      OpenQC ships with a set of example datasets in the <code>backend/data/samples/</code> directory. These files
+      LabQC ships with a set of example datasets in the <code>backend/data/samples/</code> directory. These files
       are designed to help you test every module of the application and verify that it is functioning correctly. Each
       file is crafted to demonstrate specific features and produce predictable, verifiable results.
     </p>
     <p>
-      Use these files when first setting up OpenQC, after upgrades, or for training new laboratory staff on the system.
+      Use these files when first setting up LabQC, after upgrades, or for training new laboratory staff on the system.
     </p>
 
     <h2>Sample Files</h2>
@@ -175,7 +175,7 @@
 
     <h2>Quick Reference Table</h2>
     <p>
-      Use this table as a quick lookup when testing OpenQC modules:
+      Use this table as a quick lookup when testing LabQC modules:
     </p>
 
     <table>

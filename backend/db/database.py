@@ -1,5 +1,5 @@
 """
-Database configuration for OpenQC.
+Database configuration for LabQC.
 
 Provides SQLAlchemy engine, session factory, declarative base,
 and FastAPI dependency for database session injection.
@@ -13,7 +13,7 @@ from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
 
 # Database file lives inside backend/data/
 _DB_DIR = Path(__file__).resolve().parent.parent / "data"
-_DB_PATH = _DB_DIR / "openqc.db"
+_DB_PATH = _DB_DIR / "labqc.db"
 DATABASE_URL = f"sqlite:///{_DB_PATH}"
 
 engine = create_engine(
