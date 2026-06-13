@@ -72,7 +72,12 @@ PROTECTED_PREFIXES = ("/qc/", "/sigma/", "/validation/", "/audit/", "/lots/", "/
 
 @app.middleware("http")
 async def license_guard(request, call_next):
-    """Block protected API routes if license is invalid. SPA + unprotected pass through."""
+    """Block protected API routes if license is invalid — **standalone mode only**.
+    Web/online deployments skip license enforcement entirely."""
+    # Only enforce license in standalone (EXE) mode; online version is unrestricted
+    if not _is_standalone():
+        return await call_next(request)
+
     path = request.url.path
     # Always allow unprotected endpoints
     if path in UNPROTECTED:
