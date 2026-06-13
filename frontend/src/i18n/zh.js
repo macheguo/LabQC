@@ -389,4 +389,12 @@ export default {
     loginBtn: '登 录',
     loggingIn: '登录中...',
   },
+  activate: {
+    title: '软件激活',
+    subtitle: '请输入许可证密钥以激活 LabQC',
+    label: '许可证密钥',
+    placeholder: '粘贴从凯思康获取的许可证密钥...',
+    button: '激 活',
+    activating: '激活中...',
+  },
 }

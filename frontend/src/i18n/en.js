@@ -356,4 +356,12 @@ export default {
     loginBtn: 'Sign In',
     loggingIn: 'Signing in...',
   },
+  activate: {
+    title: 'Activate License',
+    subtitle: 'Enter your license key to activate LabQC',
+    label: 'License Key',
+    placeholder: 'Paste the license key from KSC...',
+    button: 'Activate',
+    activating: 'Activating...',
+  },
 }

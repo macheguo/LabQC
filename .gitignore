@@ -45,3 +45,5 @@ frontend/screenshot-audit.mjs
 .env
 .env.local
 *.log
+backend/data/private_key.pem
+backend/data/license.lic

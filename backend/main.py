@@ -20,7 +20,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
 from backend.db.database import init_db
-from backend.routers import audit, auth, eqa, lis, lots, qc, rag, settings, sigma, validation
+from backend.routers import audit, auth, eqa, lis, license, lots, qc, rag, settings, sigma, validation
 
 # ── Determine execution mode ──────────────────────────────────────────
 def _is_standalone() -> bool:
@@ -60,9 +60,33 @@ if not _is_standalone():
         allow_headers=["*"],
     )
 
-# ---------------------------------------------------------------------------
-# Routers
-# ---------------------------------------------------------------------------
+# ══════════════════════════════════════════════════════════════════════
+# License enforcement middleware
+# ══════════════════════════════════════════════════════════════════════
+from starlette.responses import JSONResponse as _JSONResponse
+
+UNPROTECTED = {"/license/status", "/license/activate", "/auth/login", "/auth/me", "/auth/users"}
+
+PROTECTED_PREFIXES = ("/qc/", "/sigma/", "/validation/", "/audit/", "/lots/", "/rag/", "/eqa/", "/lis/", "/settings/", "/docs", "/openapi.json")
+
+
+@app.middleware("http")
+async def license_guard(request, call_next):
+    """Block protected API routes if license is invalid. SPA + unprotected pass through."""
+    path = request.url.path
+    # Always allow unprotected endpoints
+    if path in UNPROTECTED:
+        return await call_next(request)
+    # Only block protected API routes; let SPA through
+    if any(path.startswith(p) for p in PROTECTED_PREFIXES):
+        from backend.license import check_license
+        valid, msg = check_license()
+        if not valid:
+            return _JSONResponse({"detail": f"软件未激活：{msg}"}, status_code=403)
+    return await call_next(request)
+
+
+# ---------------------------------------------------------------------------\n# Routers\n# ---------------------------------------------------------------------------
 app.include_router(auth.router)
 app.include_router(qc.router)
 app.include_router(sigma.router)
@@ -73,6 +97,7 @@ app.include_router(rag.router)
 app.include_router(eqa.router)
 app.include_router(lis.router)
 app.include_router(settings.router)
+app.include_router(license.router)
 
 # ---------------------------------------------------------------------------
 # Static files & SPA (standalone mode only)
@@ -112,7 +137,7 @@ if _is_standalone():
                not request.url.path.startswith("/validation") and not request.url.path.startswith("/audit") and \
                not request.url.path.startswith("/lots") and not request.url.path.startswith("/rag") and \
                not request.url.path.startswith("/eqa") and not request.url.path.startswith("/lis") and \
-               not request.url.path.startswith("/settings") and not request.url.path.startswith("/docs") and \
+               not request.url.path.startswith("/license") and not request.url.path.startswith("/settings") and not request.url.path.startswith("/docs") and \
                not request.url.path.startswith("/openapi.json"):
                 index_path = dist / "index.html"
                 if index_path.exists():

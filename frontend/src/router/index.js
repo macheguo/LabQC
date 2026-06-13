@@ -2,6 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/activate',
+    name: 'activate',
+    component: () => import('../views/ActivateView.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),
@@ -73,10 +78,35 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, _from, next) => {
+let _licenseChecked = false
+let _licenseValid = false
+
+router.beforeEach(async (to, _from, next) => {
+  // ── License check (once per pageload) ──
+  if (!_licenseChecked) {
+    _licenseChecked = true
+    try {
+      const BASE = import.meta.env.BASE_URL
+      const r = await fetch(`${BASE}license/status`)
+      const d = await r.json()
+      _licenseValid = d.valid
+    } catch {
+      _licenseValid = false
+    }
+  }
+
+  // If unlicensed, redirect to activate (allow activate page itself)
+  if (!_licenseValid && to.name !== 'activate') {
+    return next('/activate')
+  }
+
+  // If licensed and on activate page, go to login
+  if (_licenseValid && to.name === 'activate') {
+    return next('/login')
+  }
+
   const token = localStorage.getItem('labqc_token')
   if (to.name === 'login') {
-    // Already logged in → redirect to home
     if (token) return next('/')
     return next()
   }
