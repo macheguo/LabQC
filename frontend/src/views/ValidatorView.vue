@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import FileDropZone from '@/components/upload/FileDropZone.vue'
 import AcceptanceForm from '@/components/forms/AcceptanceForm.vue'
 import ValidationTable from '@/components/tables/ValidationTable.vue'
 import { useValidationStore } from '@/stores/validationStore'
+
+const { t } = useI18n()
 
 const LinearityChart = defineAsyncComponent(() =>
   import('@/components/charts/LinearityChart.vue')
@@ -12,13 +15,13 @@ const LinearityChart = defineAsyncComponent(() =>
 
 const validation = useValidationStore()
 
-const validationTypes = [
-  { value: 'lod', label: 'LOD' },
-  { value: 'loq', label: 'LOQ' },
-  { value: 'precision_intra', label: 'Precision (Intra)' },
-  { value: 'precision_inter', label: 'Precision (Inter)' },
-  { value: 'linearity', label: 'Linearity' },
-]
+const validationTypes = computed(() => [
+  { value: 'lod', label: t('validation.lod') },
+  { value: 'loq', label: t('validation.loq') },
+  { value: 'precision_intra', label: t('validation.intraPrecision') },
+  { value: 'precision_inter', label: t('validation.interPrecision') },
+  { value: 'linearity', label: t('validation.linearity') },
+])
 
 const selectedType = ref('lod')
 
@@ -74,24 +77,24 @@ function handleReset() {
 
 <template>
   <div class="view">
-    <PageHeader title="Assay Validation" subtitle="Method validation protocols and linearity studies" />
+    <PageHeader :title="t('validation.title')" :subtitle="t('validation.subtitle')" />
 
     <!-- Upload Section -->
     <div class="section">
       <div class="section__header">
-        <span class="section__title">Upload Dataset</span>
+        <span class="section__title">{{ t('validation.uploadDataset') }}</span>
         <button
           v-if="hasDataset || hasResult"
           class="section__reset-btn"
           @click="handleReset"
         >
-          Start Over
+          {{ t('validation.startOver') }}
         </button>
       </div>
 
       <div class="upload-row">
         <div class="type-selector">
-          <label class="type-selector__label">Validation Type</label>
+          <label class="type-selector__label">{{ t('validation.validationType') }}</label>
           <select
             v-model="selectedType"
             class="type-selector__select"
@@ -127,7 +130,7 @@ function handleReset() {
     <template v-else-if="hasDataset && !hasResult">
       <div class="section section--upload-status">
         <p class="upload-status-text">
-          Dataset uploaded: <strong>{{ validation.dataset.file_name || 'file' }}</strong>
+          {{ t('validation.datasetUploaded') }} <strong>{{ validation.dataset.file_name || t('validation.file') }}</strong>
           <span v-if="validation.dataset.row_count">({{ validation.dataset.row_count }} rows)</span>
         </p>
       </div>
@@ -138,14 +141,14 @@ function handleReset() {
     <template v-else-if="hasResult">
       <div class="section section--upload-status">
         <p class="upload-status-text">
-          Dataset: <strong>{{ validation.dataset?.file_name || 'file' }}</strong>
-          | Type: <strong>{{ validationTypes.find(t => t.value === selectedType)?.label }}</strong>
+          Dataset: <strong>{{ validation.dataset?.file_name || t('validation.file') }}</strong>
+          | Type: <strong>{{ validationTypes.find(vt => vt.value === selectedType)?.label }}</strong>
         </p>
       </div>
 
       <div class="section">
         <div class="section__header">
-          <span class="section__title">Validation Results</span>
+          <span class="section__title">{{ t('validation.results') }}</span>
         </div>
         <ValidationTable :metrics="resultMetrics" />
       </div>
@@ -159,7 +162,7 @@ function handleReset() {
 
     <!-- Empty state -->
     <div v-else class="view__empty">
-      <p class="view__empty-text">Select a validation type and upload a dataset to begin.</p>
+      <p class="view__empty-text">{{ t('validation.emptyState') }}</p>
     </div>
   </div>
 </template>

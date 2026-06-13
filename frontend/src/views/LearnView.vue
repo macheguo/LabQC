@@ -1,6 +1,7 @@
 <script setup>
-import { ref, watch, inject } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { PanelRightClose, PanelRightOpen } from 'lucide-vue-next'
 
 import ChapterIntro from '@/components/learn/ChapterIntro.vue'
@@ -12,19 +13,20 @@ import ChapterUsingOpenQC from '@/components/learn/ChapterUsingOpenQC.vue'
 import ChapterExamples from '@/components/learn/ChapterExamples.vue'
 import ChapterExperimentDesign from '@/components/learn/ChapterExperimentDesign.vue'
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
-const chapters = [
-  { id: 'intro', number: 1, title: 'Introduction to QC in PCR Labs', component: ChapterIntro },
-  { id: 'westgard', number: 2, title: 'Westgard Rules Explained', component: ChapterWestgard },
-  { id: 'sigma', number: 3, title: 'Six Sigma in the Laboratory', component: ChapterSigma },
-  { id: 'validation', number: 4, title: 'Assay Validation Fundamentals', component: ChapterValidation },
-  { id: 'audit', number: 5, title: 'Audit Trail & Compliance', component: ChapterAudit },
-  { id: 'using-openqc', number: 6, title: 'Using OpenQC — Step by Step', component: ChapterUsingOpenQC },
-  { id: 'examples', number: 7, title: 'Example Datasets Reference', component: ChapterExamples },
-  { id: 'experiment-design', number: 8, title: 'Designing Experiments & Reports', component: ChapterExperimentDesign },
-]
+const chapters = computed(() => [
+  { id: 'intro', number: 1, title: t('learn.chapterList.intro'), component: ChapterIntro },
+  { id: 'westgard', number: 2, title: t('learn.chapterList.westgard'), component: ChapterWestgard },
+  { id: 'sigma', number: 3, title: t('learn.chapterList.sigma'), component: ChapterSigma },
+  { id: 'validation', number: 4, title: t('learn.chapterList.validation'), component: ChapterValidation },
+  { id: 'audit', number: 5, title: t('learn.chapterList.audit'), component: ChapterAudit },
+  { id: 'using-openqc', number: 6, title: t('learn.chapterList.usingOpenQC'), component: ChapterUsingOpenQC },
+  { id: 'examples', number: 7, title: t('learn.chapterList.examples'), component: ChapterExamples },
+  { id: 'experiment-design', number: 8, title: t('learn.chapterList.experimentDesign'), component: ChapterExperimentDesign },
+])
 
 const activeChapter = ref(route.query.chapter || 'intro')
 const tocCollapsed = ref(false)
@@ -41,20 +43,20 @@ function selectChapter(id) {
 }
 
 function getActiveComponent() {
-  const chapter = chapters.find(c => c.id === activeChapter.value)
+  const chapter = chapters.value.find(c => c.id === activeChapter.value)
   return chapter ? chapter.component : ChapterIntro
 }
 
 function navigateChapter(direction) {
-  const currentIndex = chapters.findIndex(c => c.id === activeChapter.value)
+  const currentIndex = chapters.value.findIndex(c => c.id === activeChapter.value)
   const nextIndex = currentIndex + direction
-  if (nextIndex >= 0 && nextIndex < chapters.length) {
-    selectChapter(chapters[nextIndex].id)
+  if (nextIndex >= 0 && nextIndex < chapters.value.length) {
+    selectChapter(chapters.value[nextIndex].id)
   }
 }
 
 function getCurrentIndex() {
-  return chapters.findIndex(c => c.id === activeChapter.value)
+  return chapters.value.findIndex(c => c.id === activeChapter.value)
 }
 
 function toggleToc() {
@@ -72,7 +74,7 @@ function toggleToc() {
           class="learn-nav-btn learn-nav-btn--prev"
           @click="navigateChapter(-1)"
         >
-          <span class="learn-nav-btn__direction">Previous</span>
+          <span class="learn-nav-btn__direction">{{ t('learn.previous') }}</span>
           <span class="learn-nav-btn__title">{{ chapters[getCurrentIndex() - 1].title }}</span>
         </button>
         <div v-else />
@@ -81,15 +83,15 @@ function toggleToc() {
           class="learn-nav-btn learn-nav-btn--next"
           @click="navigateChapter(1)"
         >
-          <span class="learn-nav-btn__direction">Next</span>
+          <span class="learn-nav-btn__direction">{{ t('learn.next') }}</span>
           <span class="learn-nav-btn__title">{{ chapters[getCurrentIndex() + 1].title }}</span>
         </button>
       </div>
     </main>
     <aside class="learn-toc" :class="{ 'learn-toc--collapsed': tocCollapsed }">
       <div class="learn-toc__header">
-        <span v-if="!tocCollapsed" class="learn-toc__title">Chapters</span>
-        <button class="learn-toc__toggle" @click="toggleToc" :title="tocCollapsed ? 'Show chapters' : 'Hide chapters'">
+        <span v-if="!tocCollapsed" class="learn-toc__title">{{ t('learn.chapters') }}</span>
+        <button class="learn-toc__toggle" @click="toggleToc" :title="tocCollapsed ? t('learn.showChapters') : t('learn.hideChapters')">
           <PanelRightOpen v-if="tocCollapsed" :size="16" :stroke-width="1.75" />
           <PanelRightClose v-else :size="16" :stroke-width="1.75" />
         </button>

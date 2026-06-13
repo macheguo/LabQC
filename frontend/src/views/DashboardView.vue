@@ -1,24 +1,26 @@
 <script setup>
 import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Activity, TrendingUp, Shield } from 'lucide-vue-next'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import RunSummaryTable from '@/components/tables/RunSummaryTable.vue'
 import { Button } from '@/components/ui/button'
 import { useQcStore } from '@/stores/qcStore'
 
+const { t } = useI18n()
 const router = useRouter()
 const store = useQcStore()
 
 const totalRuns = computed(() => store.pagination.total || store.runs.length)
 const totalViolations = computed(() => store.violationCount)
 const lastRunDate = computed(() => {
-  if (store.runs.length === 0) return 'No runs yet'
+  if (store.runs.length === 0) return t('dashboard.noRunsYet')
   const latest = store.runs[0]
   const dateStr = latest.uploaded_at
   if (!dateStr) return 'N/A'
   const d = new Date(dateStr)
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
 })
 
 function handleSelectRun(runId) {
@@ -42,27 +44,27 @@ onMounted(() => {
 
 <template>
   <div class="view">
-    <PageHeader title="Dashboard" subtitle="System overview and summary metrics" />
+    <PageHeader :title="t('dashboard.title')" :subtitle="t('dashboard.subtitle')" />
 
     <div class="view__body">
       <!-- Stats Cards -->
       <section class="stats-row">
         <div class="stat-card">
-          <span class="stat-card__label">Total Runs</span>
+          <span class="stat-card__label">{{ t('dashboard.totalRuns') }}</span>
           <span class="stat-card__value">
             <template v-if="store.loading">--</template>
             <template v-else>{{ totalRuns }}</template>
           </span>
         </div>
         <div class="stat-card">
-          <span class="stat-card__label">Total Violations</span>
+          <span class="stat-card__label">{{ t('dashboard.totalViolations') }}</span>
           <span class="stat-card__value" :class="{ 'stat-card__value--danger': totalViolations > 0 }">
             <template v-if="store.loading">--</template>
             <template v-else>{{ totalViolations }}</template>
           </span>
         </div>
         <div class="stat-card">
-          <span class="stat-card__label">Last Run</span>
+          <span class="stat-card__label">{{ t('dashboard.lastRun') }}</span>
           <span class="stat-card__value stat-card__value--text">
             <template v-if="store.loading">--</template>
             <template v-else>{{ lastRunDate }}</template>
@@ -72,7 +74,7 @@ onMounted(() => {
 
       <!-- Recent QC Runs -->
       <section class="section">
-        <h2 class="section__title">Recent QC Runs</h2>
+        <h2 class="section__title">{{ t('dashboard.recentRuns') }}</h2>
         <div class="section__content">
           <template v-if="store.loading && store.runs.length === 0">
             <div class="skeleton skeleton--table" />
@@ -90,19 +92,19 @@ onMounted(() => {
 
       <!-- Quick Actions -->
       <section class="section">
-        <h2 class="section__title">Quick Actions</h2>
+        <h2 class="section__title">{{ t('dashboard.quickActions') }}</h2>
         <div class="actions-row">
           <Button @click="router.push('/qc')">
             <Activity :size="16" :stroke-width="1.75" />
-            <span>Upload QC Data</span>
+            <span>{{ t('dashboard.uploadQcData') }}</span>
           </Button>
           <Button variant="ghost" @click="router.push('/sigma')">
             <TrendingUp :size="16" :stroke-width="1.75" />
-            <span>View Sigma</span>
+            <span>{{ t('dashboard.viewSigma') }}</span>
           </Button>
           <Button variant="ghost" @click="router.push('/audit')">
             <Shield :size="16" :stroke-width="1.75" />
-            <span>Audit Trail</span>
+            <span>{{ t('dashboard.auditTrail') }}</span>
           </Button>
         </div>
       </section>

@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Trash2 } from 'lucide-vue-next'
 import StatusBadge from '@/components/shared/StatusBadge.vue'
 import { Button } from '@/components/ui/button'
+
+const { t } = useI18n()
 
 const props = defineProps({
   runs: { type: Array, default: () => [] },
@@ -16,7 +19,7 @@ const confirmDeleteId = ref(null)
 function formatDate(dateStr) {
   if (!dateStr) return '-'
   const d = new Date(dateStr)
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return d.toLocaleDateString('zh-CN', { year: 'numeric', month: 'short', day: 'numeric' })
 }
 
 function mapStatus(status) {
@@ -48,11 +51,11 @@ function cancelDelete(e) {
         <table class="rtable">
           <thead>
             <tr>
-              <th class="rtable__th">Date</th>
-              <th class="rtable__th">Assay</th>
-              <th class="rtable__th">Instrument</th>
-              <th class="rtable__th">Status</th>
-              <th class="rtable__th rtable__th--right">Violations</th>
+              <th class="rtable__th">{{ t('table.uploaded') }}</th>
+              <th class="rtable__th">{{ t('table.assay') }}</th>
+              <th class="rtable__th">{{ t('table.instrument') }}</th>
+              <th class="rtable__th">{{ t('table.status') }}</th>
+              <th class="rtable__th rtable__th--right">{{ t('table.violations') }}</th>
               <th class="rtable__th rtable__th--center" style="width: 60px;"></th>
             </tr>
           </thead>
@@ -75,12 +78,12 @@ function cancelDelete(e) {
               <td class="rtable__td rtable__td--center">
                 <template v-if="confirmDeleteId === run.id">
                   <div class="confirm-delete">
-                    <Button size="sm" variant="destructive" @click="confirmDelete">Yes</Button>
-                    <Button size="sm" variant="ghost" @click="cancelDelete">No</Button>
+                    <Button size="sm" variant="destructive" @click="confirmDelete">{{ t('shared.confirm') }}</Button>
+                    <Button size="sm" variant="ghost" @click="cancelDelete">{{ t('shared.cancel') }}</Button>
                   </div>
                 </template>
                 <template v-else>
-                  <button class="delete-btn" title="Delete run" @click="requestDelete(run.id, $event)">
+                  <button class="delete-btn" :title="t('shared.delete')" @click="requestDelete(run.id, $event)">
                     <Trash2 :size="14" :stroke-width="1.75" />
                   </button>
                 </template>
@@ -92,8 +95,8 @@ function cancelDelete(e) {
     </template>
 
     <div v-else class="run-table__empty">
-      <p class="run-table__empty-title">No QC runs yet</p>
-      <p class="run-table__empty-text">Upload a QC data file to get started.</p>
+      <p class="run-table__empty-title">{{ t('qc.noRuns') }}</p>
+      <p class="run-table__empty-text">{{ t('qc.uploadHint') }}</p>
     </div>
   </div>
 </template>

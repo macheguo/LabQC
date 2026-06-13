@@ -12,23 +12,44 @@ from backend.parsers.base_parser import BaseParser
 # Auto-detection patterns (tried in order, case-insensitive).
 # Each list is ordered by specificity so more-specific names match first.
 _VALUE_PATTERNS = [
+    # English
     "ct value", "cq", "ct", "value", "result", "measurement",
+    # Chinese
+    "ct值", "cq值", "ct", "cq", "值", "结果", "测定结果", "浓度",
+    "检测值", "测量值",
 ]
 _LEVEL_PATTERNS = [
+    # English
     "control level", "level", "sample name", "sample id", "sample",
     "control", "content",
+    # Chinese
+    "质控水平", "水平", "质控品", "级别", "样品名称", "样本名称",
+    "样本", "样品", "质控级别", "质控等级",
 ]
 _MEAN_PATTERNS = [
+    # English
     "ct mean", "assigned mean", "target mean", "mean",
+    # Chinese
+    "均值", "靶值", "靶均值", "标准均值", "平均", "平均值",
+    "目标均值", "设定均值",
 ]
 _SD_PATTERNS = [
+    # English
     "ct sd", "assigned sd", "target sd", "std dev", "sd",
+    # Chinese
+    "标准差", "标准偏差", "sd", "sd值",
 ]
 _TARGET_PATTERNS = [
+    # English
     "target name", "target", "analyte", "parameter", "test",
+    # Chinese
+    "靶标", "分析物", "项目", "检测项目", "参数", "指标",
 ]
 _WELL_PATTERNS = [
+    # English
     "well position", "well",
+    # Chinese
+    "孔位", "孔号", "孔", "位置",
 ]
 
 
@@ -239,18 +260,18 @@ def _derive_control_level(raw: str) -> str:
 
     lower = raw.lower()
 
-    # Explicit level tags (most specific first)
-    for tag in ("l1", "level 1", "level1"):
+    # Explicit level tags (most specific first) — English
+    for tag in ("l1", "level 1", "level1", "水平1", "水平一", "低值"):
         if tag in lower:
             return "L1"
-    for tag in ("l2", "level 2", "level2"):
+    for tag in ("l2", "level 2", "level2", "水平2", "水平二", "中值", "正常"):
         if tag in lower:
             return "L2"
-    for tag in ("l3", "level 3", "level3"):
+    for tag in ("l3", "level 3", "level3", "水平3", "水平三", "高值"):
         if tag in lower:
             return "L3"
 
-    # Clinical-chemistry / hematology qualitative tags
+    # Clinical-chemistry qualitative tags — English
     if "low" in lower and "normal" not in lower:
         return "L1"
     if "normal" in lower:
@@ -258,6 +279,16 @@ def _derive_control_level(raw: str) -> str:
     if "mid" in lower or "medium" in lower:
         return "L2"
     if "high" in lower or "abnormal" in lower or "pathological" in lower or "elevated" in lower:
+        return "L2"
+
+    # Clinical-chemistry qualitative tags — Chinese
+    if "低值" in lower and "正常" not in lower:
+        return "L1"
+    if "正常" in lower:
+        return "L1"
+    if "中值" in lower or "中等" in lower:
+        return "L2"
+    if "高值" in lower or "异常" in lower or "病理" in lower:
         return "L2"
 
     # Bio-Rad CFX "Pos Ctrl" / "Neg Ctrl" patterns

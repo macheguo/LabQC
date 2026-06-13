@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = '/openqc'
 
 export async function uploadQCFile(file, lotMetadata) {
   const formData = new FormData()

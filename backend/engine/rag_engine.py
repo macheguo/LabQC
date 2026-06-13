@@ -26,41 +26,55 @@ except ImportError:
 
 
 try:
-    import anthropic
+    import openai
 
-    _anthropic_client = None
+    _openai_client = None
 
-    def get_anthropic_client():
-        global _anthropic_client
-        if _anthropic_client is None:
-            # Try to get API key from DB settings first, then fall back to env var
-            api_key = _get_stored_api_key()
-            if api_key:
-                _anthropic_client = anthropic.Anthropic(api_key=api_key)
-            else:
-                _anthropic_client = anthropic.Anthropic()  # uses ANTHROPIC_API_KEY env var
-        return _anthropic_client
+    def get_openai_client():
+        global _openai_client
+        if _openai_client is None:
+            config = _get_ai_config()
+            _openai_client = openai.OpenAI(
+                api_key=config["api_key"],
+                base_url=config["base_url"],
+            )
+        return _openai_client
 
 except ImportError:
 
-    def get_anthropic_client():
+    def get_openai_client():
         raise ImportError(
-            "anthropic SDK required. Install with: pip install anthropic"
+            "openai SDK required. Install with: pip install openai"
         )
 
 
-def _get_stored_api_key() -> str | None:
-    """Retrieve the API key from the settings DB, if available."""
+def _get_ai_config() -> dict:
+    """Retrieve AI configuration from settings DB or environment."""
     try:
         from backend.db.database import SessionLocal
         from backend.db.settings_repository import get_setting
         db = SessionLocal()
         try:
-            return get_setting(db, "anthropic_api_key")
+            api_key = get_setting(db, "openai_api_key") or ""
+            base_url = get_setting(db, "openai_base_url") or ""
+            model = get_setting(db, "openai_model") or "gpt-4o"
         finally:
             db.close()
     except Exception:
-        return None
+        api_key = ""
+        base_url = ""
+        model = "gpt-4o"
+
+    return {
+        "api_key": api_key,
+        "base_url": base_url,
+        "model": model,
+    }
+
+
+def _get_model_name() -> str:
+    """Get the configured model name."""
+    return _get_ai_config()["model"]
 
 
 REGULATORY_DOCS_DIR = (
@@ -144,7 +158,7 @@ def retrieve_context(question: str, n_results: int = 5) -> list[dict]:
 
 
 def generate_answer(question: str, context_chunks: list[dict]) -> dict:
-    """Generate answer from retrieved context using Claude.
+    """Generate answer from retrieved context using OpenAI-compatible LLM.
 
     Returns: {"answer": str, "sources": list[dict], "model_used": str}
     """
@@ -176,22 +190,22 @@ def generate_answer(question: str, context_chunks: list[dict]) -> dict:
         "the context."
     )
 
-    client = get_anthropic_client()
-    response = client.messages.create(
-        model="claude-sonnet-4-6-20250514",
+    client = get_openai_client()
+    model = _get_model_name()
+
+    response = client.chat.completions.create(
+        model=model,
         max_tokens=1024,
-        system=system_prompt,
         messages=[
+            {"role": "system", "content": system_prompt},
             {
                 "role": "user",
-                "content": (
-                    f"Context:{context_text}\n\nQuestion: {question}"
-                ),
-            }
+                "content": f"Context:{context_text}\n\nQuestion: {question}",
+            },
         ],
     )
 
-    answer_text = response.content[0].text
+    answer_text = response.choices[0].message.content or ""
 
     sources = [
         {
@@ -206,7 +220,7 @@ def generate_answer(question: str, context_chunks: list[dict]) -> dict:
     return {
         "answer": answer_text,
         "sources": sources,
-        "model_used": "claude-sonnet-4-6-20250514",
+        "model_used": model,
     }
 
 

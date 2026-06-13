@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { X } from 'lucide-vue-next'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import ExportButton from '@/components/shared/ExportButton.vue'
@@ -11,48 +12,49 @@ import { Button } from '@/components/ui/button'
 import { useQcStore } from '@/stores/qcStore'
 import { printReport } from '@/utils/printReport'
 
+const { t } = useI18n()
 const store = useQcStore()
 
 // --- Instrument/experiment type config ---
 const instrumentTypes = [
   {
     id: 'rt-pcr',
-    label: 'RT-PCR / Molecular',
+    label: t('qc.rtPcr'),
     instruments: ['QuantStudio 5', 'QuantStudio 7', 'Bio-Rad CFX96', 'Bio-Rad CFX Connect', 'Roche LightCycler 480', 'Cepheid GeneXpert', 'Other'],
     assays: ['SARS-CoV-2', 'HIV-1 RNA', 'HBV DNA', 'HCV RNA', 'TB/MTB', 'Influenza A/B', 'HPV', 'Other'],
     showChannel: true,
   },
   {
     id: 'chemistry',
-    label: 'Clinical Chemistry',
+    label: t('qc.clinicalChemistry'),
     instruments: ['Cobas c501', 'Cobas c701', 'Vitros 5600', 'Architect c8000', 'AU5800', 'Other'],
     assays: ['Glucose', 'Creatinine', 'BUN', 'Total Cholesterol', 'HDL', 'LDL', 'Triglycerides', 'ALT', 'AST', 'ALP', 'Bilirubin', 'HbA1c', 'Other'],
     showChannel: false,
   },
   {
     id: 'hematology',
-    label: 'Hematology',
+    label: t('qc.hematology'),
     instruments: ['Sysmex XN-1000', 'Sysmex XN-2000', 'Beckman Coulter DxH 800', 'Mindray BC-6800', 'Other'],
     assays: ['CBC (WBC)', 'CBC (RBC)', 'Hemoglobin', 'Hematocrit', 'Platelet Count', 'MCV', 'MCH', 'MCHC', 'Other'],
     showChannel: false,
   },
   {
     id: 'immunoassay',
-    label: 'Immunoassay',
+    label: t('qc.immunoassay'),
     instruments: ['Cobas e801', 'Cobas e601', 'Architect i2000', 'Vitros ECi', 'Liaison XL', 'Other'],
     assays: ['TSH', 'FT4', 'FT3', 'Troponin I', 'CK-MB', 'BNP', 'PSA', 'CEA', 'CA-125', 'AFP', 'Ferritin', 'Vitamin D', 'Other'],
     showChannel: false,
   },
   {
     id: 'coagulation',
-    label: 'Coagulation',
+    label: t('qc.coagulation'),
     instruments: ['Sysmex CS-5100', 'Sysmex CS-2500', 'Stago STA-R Max', 'ACL TOP', 'Other'],
     assays: ['PT/INR', 'APTT', 'Fibrinogen', 'D-Dimer', 'Other'],
     showChannel: false,
   },
   {
     id: 'other',
-    label: 'Other / Custom',
+    label: t('qc.otherCustom'),
     instruments: [],
     assays: [],
     showChannel: false,
@@ -153,7 +155,7 @@ async function handleUpload() {
     loadRuns()
   } catch (e) {
     uploadStatus.value = 'error'
-    const msg = e.message || 'Upload or analysis failed.'
+    const msg = e.message || t('parser.unsupportedFormat')
     showErrorToast(msg)
     if (msg.toLowerCase().includes('no data points could be parsed')) {
       showColumnMapping.value = true
@@ -192,7 +194,7 @@ async function retryUploadWithMapping() {
     loadRuns()
   } catch (e) {
     uploadStatus.value = 'error'
-    showErrorToast(e.message || 'Upload or analysis failed.')
+    showErrorToast(e.message || t('parser.unsupportedFormat'))
   }
 }
 
@@ -226,14 +228,14 @@ async function handleDeleteRun(runId) {
     await store.removeRun(runId)
     loadRuns()
   } catch (e) {
-    showErrorToast(e.message || 'Failed to delete run.')
+    showErrorToast(e.message || t('shared.error'))
   }
 }
 
 function handleExport() {
   printReport({
-    title: 'QC Monitor Report',
-    subtitle: `Assay: ${effectiveAssay.value} | Instrument: ${effectiveInstrument.value}`,
+    title: t('qc.title'),
+    subtitle: `${effectiveAssay.value} | ${effectiveInstrument.value}`,
   })
 }
 
@@ -242,7 +244,7 @@ onMounted(() => { loadRuns() })
 
 <template>
   <div class="view">
-    <PageHeader title="QC Monitor" subtitle="Westgard rule evaluation and Levey-Jennings charts">
+    <PageHeader :title="t('qc.title')" :subtitle="t('qc.subtitle')">
       <template #actions>
         <ExportButton @export="handleExport" />
       </template>
@@ -263,60 +265,50 @@ onMounted(() => { loadRuns() })
 
       <!-- Upload Section -->
       <section class="section">
-        <h2 class="section__title">Upload QC Data</h2>
+        <h2 class="section__title">{{ t('qc.uploadSection') }}</h2>
 
         <div class="upload-card">
           <!-- Step 1: Experiment type -->
           <div class="upload-row">
             <div class="field">
-              <label class="field__label">Experiment Type</label>
+              <label class="field__label">{{ t('qc.experimentType') }}</label>
               <select v-model="selectedType" class="field__select">
-                <option value="" disabled>Select type...</option>
-                <option v-for="t in instrumentTypes" :key="t.id" :value="t.id">{{ t.label }}</option>
+                <option value="" disabled>{{ t('qc.experimentType') }}...</option>
+                <option v-for="opt in instrumentTypes" :key="opt.id" :value="opt.id">{{ opt.label }}</option>
               </select>
             </div>
 
             <div v-if="currentConfig" class="field">
-              <label class="field__label">Instrument</label>
+              <label class="field__label">{{ t('qc.instrument') }}</label>
               <select v-if="instrumentOptions.length" v-model="selectedInstrument" class="field__select">
-                <option value="" disabled>Select...</option>
+                <option value="" disabled>{{ t('qc.instrument') }}...</option>
                 <option v-for="i in instrumentOptions" :key="i" :value="i">{{ i }}</option>
               </select>
-              <input v-else v-model="customInstrument" class="field__input" placeholder="Instrument name" />
-            </div>
-
-            <div v-if="selectedInstrument === 'Other'" class="field">
-              <label class="field__label">Instrument Name</label>
-              <input v-model="customInstrument" class="field__input" placeholder="Enter name" />
+              <input v-else v-model="customInstrument" class="field__input" :placeholder="t('qc.instrument')" />
             </div>
 
             <div v-if="currentConfig" class="field">
-              <label class="field__label">Assay / Analyte</label>
+              <label class="field__label">{{ t('qc.assay') }}</label>
               <select v-if="assayOptions.length" v-model="selectedAssay" class="field__select">
-                <option value="" disabled>Select...</option>
+                <option value="" disabled>{{ t('qc.assay') }}...</option>
                 <option v-for="a in assayOptions" :key="a" :value="a">{{ a }}</option>
               </select>
-              <input v-else v-model="customAssay" class="field__input" placeholder="Assay name" />
-            </div>
-
-            <div v-if="selectedAssay === 'Other'" class="field">
-              <label class="field__label">Assay Name</label>
-              <input v-model="customAssay" class="field__input" placeholder="Enter name" />
+              <input v-else v-model="customAssay" class="field__input" :placeholder="t('qc.assay')" />
             </div>
           </div>
 
           <!-- Step 2: Optional fields -->
           <div v-if="currentConfig" class="upload-row">
             <div v-if="showChannel" class="field">
-              <label class="field__label">Channel / Fluor</label>
+              <label class="field__label">{{ t('qc.channel') }}</label>
               <input v-model="channel" class="field__input" placeholder="e.g. FAM" />
             </div>
             <div class="field">
-              <label class="field__label">Reagent Lot</label>
+              <label class="field__label">{{ t('qc.reagentLot') }}</label>
               <input v-model="reagentLotId" class="field__input" placeholder="Lot #" />
             </div>
             <div class="field">
-              <label class="field__label">Control Lot</label>
+              <label class="field__label">{{ t('qc.controlLot') }}</label>
               <input v-model="controlLotId" class="field__input" placeholder="Lot #" />
             </div>
           </div>
@@ -327,7 +319,7 @@ onMounted(() => { loadRuns() })
               :disabled="!selectedFile || !selectedType || uploadStatus === 'uploading' || uploadStatus === 'parsing'"
               @click="handleUpload"
             >
-              {{ uploadStatus === 'uploading' ? 'Uploading...' : uploadStatus === 'parsing' ? 'Analyzing...' : 'Upload and Analyze' }}
+              {{ uploadStatus === 'uploading' ? t('qc.uploading') : uploadStatus === 'parsing' ? t('shared.loading') : t('qc.upload') }}
             </Button>
             <FileDropZone @file-selected="onFileSelected" />
           </div>
@@ -337,50 +329,46 @@ onMounted(() => { loadRuns() })
       <!-- Column Mapping Fallback -->
       <section v-if="showColumnMapping" class="section">
         <div class="column-mapping">
-          <h3 class="column-mapping__title">Column Mapping Required</h3>
-          <p class="mapping-hint">Auto-detection failed. Specify which columns in your file contain the data:</p>
+          <h3 class="column-mapping__title">{{ t('parser.invalidColumnMapping') }}</h3>
+          <p class="mapping-hint">{{ t('parser.noDataPoints') }}</p>
           <div class="mapping-grid">
             <div class="field">
-              <label class="field__label">Value Column *</label>
+              <label class="field__label">{{ t('qc.assay') }} *</label>
               <input v-model="colValue" class="field__input" placeholder="e.g. Cq, Value, Result" />
             </div>
             <div class="field">
-              <label class="field__label">Level Column</label>
+              <label class="field__label">{{ t('qc.assay') }}</label>
               <input v-model="colLevel" class="field__input" placeholder="e.g. Level, Sample" />
             </div>
             <div class="field">
-              <label class="field__label">Mean (optional)</label>
+              <label class="field__label">{{ t('qc.mean') }} ({{ t('shared.save') }})</label>
               <input v-model="colMean" class="field__input" placeholder="e.g. Mean" />
             </div>
             <div class="field">
-              <label class="field__label">SD (optional)</label>
+              <label class="field__label">{{ t('qc.sd') }} ({{ t('shared.save') }})</label>
               <input v-model="colSD" class="field__input" placeholder="e.g. SD" />
             </div>
-            <div class="field">
-              <label class="field__label">Analyte (optional)</label>
-              <input v-model="colTarget" class="field__input" placeholder="e.g. Analyte" />
-            </div>
           </div>
-          <Button :disabled="!colValue" @click="retryUploadWithMapping">Retry with Mapping</Button>
+          <Button :disabled="!colValue" @click="retryUploadWithMapping">{{ t('qc.upload') }}</Button>
         </div>
       </section>
 
       <!-- LJ Chart -->
       <section v-if="chartData" class="section">
-        <h2 class="section__title">Levey-Jennings Chart</h2>
+        <h2 class="section__title">{{ t('qc.ljChart') }}</h2>
         <div class="section__content">
           <LJChart :data-points="chartData.data_points || []" :mean="chartData.mean" :sd="chartData.sd" />
         </div>
       </section>
 
       <section v-else-if="store.loading && uploadStatus === 'parsing'" class="section">
-        <h2 class="section__title">Levey-Jennings Chart</h2>
+        <h2 class="section__title">{{ t('qc.ljChart') }}</h2>
         <div class="skeleton skeleton--chart" />
       </section>
 
       <!-- Violations -->
       <section v-if="store.analysisResult" class="section">
-        <h2 class="section__title">Violations</h2>
+        <h2 class="section__title">{{ t('qc.violationDetails') }}</h2>
         <div class="section__content">
           <ViolationTable :violations="violations" />
         </div>
@@ -388,7 +376,7 @@ onMounted(() => { loadRuns() })
 
       <!-- Run History -->
       <section class="section no-print">
-        <h2 class="section__title">Run History</h2>
+        <h2 class="section__title">{{ t('qc.runHistory') }}</h2>
         <div class="section__content">
           <template v-if="runsLoading && store.runs.length === 0">
             <div class="skeleton skeleton--table" />
@@ -498,25 +486,19 @@ onMounted(() => { loadRuns() })
   border-radius: 6px;
   outline: none;
   font-family: inherit;
-  cursor: pointer;
+  -webkit-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238E97A3' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 8px center;
-  transition: border-color 0.15s;
 }
 
 .field__select:focus { border-color: var(--border-strong); }
 
-.field__select option {
-  background: var(--bg-surface-2);
-  color: var(--text-primary);
-}
-
-/* Column mapping */
+/* Column mapping fallback */
 .column-mapping {
-  background: color-mix(in srgb, var(--color-warning) 6%, var(--bg-surface));
-  border: 1px solid color-mix(in srgb, var(--color-warning) 25%, transparent);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-warning);
   border-radius: 8px;
   padding: 20px;
 }
@@ -524,82 +506,70 @@ onMounted(() => { loadRuns() })
 .column-mapping__title {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
+  color: var(--text-warning);
+  margin-bottom: 8px;
 }
 
 .mapping-hint {
+  color: var(--text-muted);
   font-size: 13px;
-  color: var(--text-secondary);
   margin-bottom: 16px;
 }
 
 .mapping-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 12px;
-  flex-wrap: wrap;
   margin-bottom: 16px;
 }
 
-.mapping-grid .field { max-width: 180px; min-width: 120px; }
-
-/* Error toast (fixed position) */
+/* Error toast */
 .error-toast {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
+  bottom: 24px;
+  right: 24px;
+  background: var(--color-danger);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  max-width: 480px;
-  background: color-mix(in srgb, var(--color-danger) 15%, var(--bg-surface));
-  border: 1px solid var(--color-danger);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  max-width: 420px;
 }
 
-.error-toast__text {
-  font-size: 13px;
-  color: var(--color-danger);
-  flex: 1;
-  line-height: 1.4;
-}
-
+.error-toast__text { font-size: 13px; flex: 1; }
 .error-toast__close {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
   background: none;
-  color: var(--text-muted);
+  border: none;
+  color: white;
   cursor: pointer;
-  border-radius: 4px;
-  flex-shrink: 0;
-  transition: color 0.15s, background 0.15s;
+  opacity: 0.7;
 }
 
-.error-toast__close:hover {
-  color: var(--color-danger);
-  background: color-mix(in srgb, var(--color-danger) 10%, transparent);
-}
+.error-toast__close:hover { opacity: 1; }
 
-.toast-enter-active { transition: all 0.3s ease; }
-.toast-leave-active { transition: all 0.2s ease; }
-.toast-enter-from { opacity: 0; transform: translateX(40px); }
-.toast-leave-to { opacity: 0; transform: translateX(40px); }
+.toast-enter-active, .toast-leave-active { transition: all 0.3s ease; }
+.toast-enter-from, .toast-leave-to { opacity: 0; transform: translateY(12px); }
 
-/* Skeletons */
 .skeleton {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
   animation: pulse 1.5s ease-in-out infinite;
 }
-.skeleton--chart { height: 340px; }
+
 .skeleton--table { height: 200px; }
-@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.skeleton--chart { height: 300px; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@media print {
+  .no-print { display: none; }
+}
 </style>

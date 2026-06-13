@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAuditStore } from '@/stores/auditStore'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import StatusBadge from '@/components/shared/StatusBadge.vue'
@@ -9,21 +10,22 @@ import { Button } from '@/components/ui/button'
 import { ShieldCheck, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { printReport } from '@/utils/printReport'
 
+const { t } = useI18n()
 const store = useAuditStore()
 
 const eventTypeFilter = ref('all')
 const exporting = ref(false)
 const verifying = ref(false)
 
-const eventTypes = [
-  { value: 'all', label: 'All Events' },
-  { value: 'upload', label: 'Upload' },
-  { value: 'view', label: 'View' },
-  { value: 'export', label: 'Export' },
-  { value: 'lot_change', label: 'Lot Change' },
-  { value: 'settings', label: 'Settings' },
-  { value: 'rag_query', label: 'RAG Query' },
-]
+const eventTypes = computed(() => [
+  { value: 'all', label: t('audit.allEvents') },
+  { value: 'upload', label: t('audit.uploadEvent') },
+  { value: 'view', label: t('audit.viewEvent') },
+  { value: 'export', label: t('audit.exportEvent') },
+  { value: 'lot_change', label: t('audit.lotChangeEvent') },
+  { value: 'settings', label: t('audit.settingsEvent') },
+  { value: 'rag_query', label: t('audit.ragQueryEvent') },
+])
 
 function loadWithFilter() {
   const params = {}
@@ -50,8 +52,8 @@ async function handleVerifyChain() {
 async function handleExport(format) {
   if (format === 'pdf') {
     printReport({
-      title: 'Audit Trail Report',
-      subtitle: `${store.entries.length} entries`,
+      title: t('audit.reportTitle'),
+      subtitle: t('audit.reportSubtitle', { count: store.entries.length }),
     })
     return
   }
@@ -83,8 +85,8 @@ const chainBadgeStatus = computed(() => {
 
 const chainBadgeLabel = computed(() => {
   if (!store.chainStatus) return ''
-  if (store.chainStatus.valid) return 'Chain Valid'
-  return `Invalid at entry #${store.chainStatus.first_invalid_id}`
+  if (store.chainStatus.valid) return t('audit.chainValid')
+  return t('audit.invalidAtEntry') + store.chainStatus.first_invalid_id
 })
 
 const totalPages = computed(() => {
@@ -106,8 +108,8 @@ onMounted(() => {
 <template>
   <div class="view">
     <PageHeader
-      title="Audit Trail"
-      subtitle="Immutable action log and compliance records"
+      :title="t('audit.title')"
+      :subtitle="t('audit.subtitle')"
     >
       <template #actions>
         <ExportButton label="JSON" :loading="exporting" @export="handleExport('json')" />
@@ -125,13 +127,13 @@ onMounted(() => {
           @click="handleVerifyChain"
         >
           <ShieldCheck :size="15" :stroke-width="1.75" />
-          {{ verifying ? 'Verifying...' : 'Verify Chain' }}
+          {{ verifying ? t('audit.verifying') : t('audit.verifyChain') }}
         </Button>
         <template v-if="store.chainStatus">
           <StatusBadge :status="chainBadgeStatus" />
           <span class="chain-strip__label">{{ chainBadgeLabel }}</span>
           <span v-if="store.chainStatus.entries_checked" class="chain-strip__meta">
-            ({{ store.chainStatus.entries_checked }} entries checked)
+            ({{ store.chainStatus.entries_checked }} {{ t('audit.entriesChecked') }})
           </span>
         </template>
       </div>
@@ -140,7 +142,7 @@ onMounted(() => {
     <!-- Filter bar -->
     <div class="filter-bar">
       <div class="filter-group">
-        <label class="filter-label">Event Type</label>
+        <label class="filter-label">{{ t('audit.eventType') }}</label>
         <select
           v-model="eventTypeFilter"
           class="filter-select"
@@ -156,7 +158,7 @@ onMounted(() => {
     <!-- Error display -->
     <div v-if="store.error" class="error-strip">
       <p class="error-strip__text">{{ store.error }}</p>
-      <Button variant="ghost" size="sm" @click="store.clearError()">Dismiss</Button>
+      <Button variant="ghost" size="sm" @click="store.clearError()">{{ t('audit.dismiss') }}</Button>
     </div>
 
     <!-- Audit table -->
@@ -167,8 +169,8 @@ onMounted(() => {
     <!-- Pagination -->
     <div v-if="store.entries.length > 0" class="pagination">
       <span class="pagination__info">
-        Page {{ store.pagination.page }} of {{ totalPages }}
-        <span class="pagination__total">({{ store.pagination.total }} entries)</span>
+        {{ t('audit.pageOf') }} {{ store.pagination.page }} {{ t('audit.of') }} {{ totalPages }}
+        <span class="pagination__total">({{ store.pagination.total }} {{ t('audit.entries') }})</span>
       </span>
       <div class="pagination__controls">
         <Button

@@ -1,20 +1,22 @@
 <script setup>
 import { onMounted, ref, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useLotStore } from '@/stores/lotStore'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import LotForm from '@/components/forms/LotForm.vue'
 import { Button } from '@/components/ui/button'
 import { Plus } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const store = useLotStore()
 
 const activeTab = ref('reagent')
 const showForm = ref(false)
 
-const tabs = [
-  { key: 'reagent', label: 'Reagent Lots' },
-  { key: 'control', label: 'Control Lots' },
-]
+const tabs = computed(() => [
+  { key: 'reagent', label: t('lots.reagentLots') },
+  { key: 'control', label: t('lots.controlLots') },
+])
 
 function switchTab(tabKey) {
   activeTab.value = tabKey
@@ -72,9 +74,9 @@ function lotStatus(lot) {
 
 function lotStatusLabel(lot) {
   const s = lotStatus(lot)
-  if (s === 'fail') return 'Expired'
-  if (s === 'warning') return 'Expiring Soon'
-  return 'Active'
+  if (s === 'fail') return t('lots.expired')
+  if (s === 'warning') return t('lots.expiringSoon')
+  return t('lots.active')
 }
 
 onMounted(() => {
@@ -86,8 +88,8 @@ onMounted(() => {
 <template>
   <div class="view">
     <PageHeader
-      title="Lot Registry"
-      subtitle="Reagent and control lot management"
+      :title="t('lots.title')"
+      :subtitle="t('lots.subtitle')"
     />
 
     <!-- Tabs -->
@@ -107,14 +109,14 @@ onMounted(() => {
     <div class="actions-bar">
       <Button size="sm" @click="toggleForm">
         <Plus :size="15" :stroke-width="1.75" />
-        {{ showForm ? 'Cancel' : 'Add Lot' }}
+        {{ showForm ? t('shared.cancel') : t('lots.addLot') }}
       </Button>
     </div>
 
     <!-- Error display -->
     <div v-if="store.error" class="error-strip">
       <p class="error-strip__text">{{ store.error }}</p>
-      <Button variant="ghost" size="sm" @click="store.clearError()">Dismiss</Button>
+      <Button variant="ghost" size="sm" @click="store.clearError()">{{ t('lots.dismiss') }}</Button>
     </div>
 
     <!-- Inline form -->
@@ -153,11 +155,11 @@ onMounted(() => {
       >
         <thead>
           <tr>
-            <th>Assay</th>
-            <th>Lot Number</th>
-            <th>Open Date</th>
-            <th>Expiry Date</th>
-            <th>Status</th>
+            <th>{{ t('lots.assay') }}</th>
+            <th>{{ t('lots.lotNumber') }}</th>
+            <th>{{ t('lots.openDate') }}</th>
+            <th>{{ t('lots.expiryDate') }}</th>
+            <th>{{ t('lots.status') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -182,13 +184,13 @@ onMounted(() => {
       >
         <thead>
           <tr>
-            <th>Control Name</th>
-            <th>Manufacturer</th>
-            <th>Lot Number</th>
-            <th>Mean</th>
-            <th>SD</th>
-            <th>Expiry Date</th>
-            <th>Status</th>
+            <th>{{ t('lots.controlName') }}</th>
+            <th>{{ t('lots.manufacturer') }}</th>
+            <th>{{ t('lots.lotNumber') }}</th>
+            <th>{{ t('lots.mean') }}</th>
+            <th>{{ t('lots.sd') }}</th>
+            <th>{{ t('lots.expiryDate') }}</th>
+            <th>{{ t('lots.status') }}</th>
           </tr>
         </thead>
         <tbody>
@@ -211,11 +213,11 @@ onMounted(() => {
       <!-- Empty state -->
       <div v-else-if="!store.loading" class="empty-state">
         <p class="empty-state__text">
-          No {{ activeTab === 'reagent' ? 'reagent' : 'control' }} lots registered yet.
+          {{ t('lots.noLots', { type: activeTab === 'reagent' ? t('lots.reagentLots').toLowerCase() : t('lots.controlLots').toLowerCase() }) }}
         </p>
         <Button v-if="!showForm" size="sm" variant="outline" @click="toggleForm">
           <Plus :size="15" :stroke-width="1.75" />
-          Add your first lot
+          {{ t('lots.addFirstLot') }}
         </Button>
       </div>
     </div>

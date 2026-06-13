@@ -1,10 +1,13 @@
 <script setup>
 import { computed, defineAsyncComponent } from 'vue'
+import { useI18n } from 'vue-i18n'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import ExportButton from '@/components/shared/ExportButton.vue'
 import SigmaInputForm from '@/components/forms/SigmaInputForm.vue'
 import { useSigmaStore } from '@/stores/sigmaStore'
 import { printReport } from '@/utils/printReport'
+
+const { t } = useI18n()
 
 const NMEDxChart = defineAsyncComponent(() =>
   import('@/components/charts/NMEDxChart.vue')
@@ -27,11 +30,11 @@ function classColor(classification) {
 
 function classLabel(classification) {
   const map = {
-    world_class: 'World Class',
-    excellent: 'Excellent',
-    good: 'Good',
-    marginal: 'Marginal',
-    unacceptable: 'Unacceptable',
+    world_class: t('sigma.worldClass'),
+    excellent: t('sigma.excellent'),
+    good: t('sigma.good'),
+    marginal: t('sigma.marginal'),
+    unacceptable: t('sigma.unacceptable'),
   }
   return map[classification] || classification
 }
@@ -42,8 +45,8 @@ function formatSigma(value) {
 
 function handleExport() {
   printReport({
-    title: 'Sigma Analysis Report',
-    subtitle: `${sigma.results.length} assays analyzed`,
+    title: t('sigma.reportTitle'),
+    subtitle: t('sigma.reportSubtitle', { count: sigma.results.length }),
   })
 }
 
@@ -58,7 +61,7 @@ async function handleCalculate(inputs) {
 
 <template>
   <div class="view">
-    <PageHeader title="Sigma Analysis" subtitle="Six Sigma metrics and QC design optimization">
+    <PageHeader :title="t('sigma.title')" :subtitle="t('sigma.subtitle')">
       <template #actions>
         <ExportButton v-if="hasResults" @export="handleExport" />
       </template>
@@ -80,18 +83,18 @@ async function handleCalculate(inputs) {
     <template v-else-if="hasResults">
       <div class="section">
         <div class="section__header">
-          <span class="section__title">Results</span>
+          <span class="section__title">{{ t('sigma.results') }}</span>
         </div>
         <div class="results-table-wrap">
           <table class="results-table">
             <thead>
               <tr>
-                <th>Assay</th>
-                <th>TEa %</th>
-                <th>Bias %</th>
-                <th>CV %</th>
-                <th>Sigma</th>
-                <th>Classification</th>
+                <th>{{ t('sigma.assay') }}</th>
+                <th>{{ t('sigma.teaPercent') }}</th>
+                <th>{{ t('sigma.biasPercent') }}</th>
+                <th>{{ t('sigma.cvPercent') }}</th>
+                <th>{{ t('sigma.sigmaValue') }}</th>
+                <th>{{ t('sigma.classification') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -120,7 +123,7 @@ async function handleCalculate(inputs) {
       <!-- Recommendations -->
       <div class="section">
         <div class="section__header">
-          <span class="section__title">Recommendations</span>
+          <span class="section__title">{{ t('sigma.recommendations') }}</span>
         </div>
         <div class="recommendations">
           <div
@@ -132,7 +135,7 @@ async function handleCalculate(inputs) {
             <ul v-if="r.recommended_rules && r.recommended_rules.length" class="recommendation__list">
               <li v-for="(rec, i) in r.recommended_rules" :key="i">{{ rec }}</li>
             </ul>
-            <p v-else class="recommendation__none">No specific recommendations.</p>
+            <p v-else class="recommendation__none">{{ t('sigma.noRecommendations') }}</p>
           </div>
         </div>
       </div>
@@ -140,7 +143,7 @@ async function handleCalculate(inputs) {
 
     <!-- Empty state -->
     <div v-else class="view__empty">
-      <p class="view__empty-text">Enter assay parameters above and click Calculate to see Sigma results.</p>
+      <p class="view__empty-text">{{ t('sigma.emptyState') }}</p>
     </div>
   </div>
 </template>

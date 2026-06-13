@@ -1,11 +1,14 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { Download, Loader2 } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
+
+const { t } = useI18n()
 
 defineProps({
   label: {
     type: String,
-    default: 'Export PDF',
+    default: undefined,
   },
   loading: {
     type: Boolean,
@@ -25,7 +28,7 @@ defineEmits(['export'])
   >
     <Loader2 v-if="loading" :size="16" :stroke-width="1.75" class="animate-spin" />
     <Download v-else :size="16" :stroke-width="1.75" />
-    <span>{{ loading ? 'Exporting...' : label }}</span>
+    <span>{{ loading ? t('shared.loading') : (label || t('qc.exportPdf')) }}</span>
   </Button>
 </template>
 

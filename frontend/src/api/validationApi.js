@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = '/openqc'
 
 export async function uploadValidationFile(file, validationType) {
   const formData = new FormData()

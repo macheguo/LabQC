@@ -1,7 +1,10 @@
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Upload, FileSpreadsheet, X } from 'lucide-vue-next'
 import { Button } from '@/components/ui/button'
+
+const { t } = useI18n()
 
 const emit = defineEmits(['file-selected'])
 
@@ -23,7 +26,6 @@ function handleFileInput(e) {
     selectedFile.value = file
     emit('file-selected', file)
   }
-  // Reset so same file can be re-selected
   e.target.value = ''
 }
 
@@ -66,7 +68,7 @@ function formatSize(bytes) {
         <FileSpreadsheet :size="16" :stroke-width="1.75" class="file-picker__icon" />
         <span class="file-picker__name">{{ selectedFile.name }}</span>
         <span class="file-picker__size">{{ formatSize(selectedFile.size) }}</span>
-        <button class="file-picker__clear" @click.stop="clearFile" title="Remove file">
+        <button class="file-picker__clear" @click.stop="clearFile" :title="t('shared.delete')">
           <X :size="14" :stroke-width="2" />
         </button>
       </div>
@@ -74,9 +76,9 @@ function formatSize(bytes) {
     <template v-else>
       <Button size="sm" variant="outline" @click="handleClick">
         <Upload :size="14" :stroke-width="1.75" />
-        Choose File
+        {{ t('qc.chooseFile') }}
       </Button>
-      <span class="file-picker__hint">.xlsx / .xls — or drop here</span>
+      <span class="file-picker__hint">{{ t('qc.dropHint') }}</span>
     </template>
   </div>
 </template>

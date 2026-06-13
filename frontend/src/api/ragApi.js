@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = '/openqc'
 
 export async function fetchRAGStatus() {
   const res = await fetch(`${BASE_URL}/rag/status`)

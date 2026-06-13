@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { ref, computed, provide } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   LayoutDashboard,
   Activity,
@@ -15,24 +16,25 @@ import {
   PanelLeftOpen,
 } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const route = useRoute()
 
 const sidebarCollapsed = ref(false)
 provide('sidebarCollapsed', sidebarCollapsed)
 
 const navItems = [
-  { to: '/', name: 'Dashboard', icon: LayoutDashboard },
-  { to: '/qc', name: 'QC Monitor', icon: Activity },
-  { to: '/sigma', name: 'Sigma Analysis', icon: TrendingUp },
-  { to: '/validation', name: 'Validation', icon: ClipboardCheck },
-  { to: '/audit', name: 'Audit Trail', icon: Shield },
-  { to: '/lots', name: 'Lot Registry', icon: Package },
-  { to: '/regulatory', name: 'Regulatory', icon: BookOpen },
-  { to: '/learn', name: 'Learn', icon: GraduationCap },
+  { to: '/', key: 'nav.dashboard', icon: LayoutDashboard },
+  { to: '/qc', key: 'nav.qcMonitor', icon: Activity },
+  { to: '/sigma', key: 'nav.sigmaAnalysis', icon: TrendingUp },
+  { to: '/validation', key: 'nav.validation', icon: ClipboardCheck },
+  { to: '/audit', key: 'nav.auditTrail', icon: Shield },
+  { to: '/lots', key: 'nav.lotRegistry', icon: Package },
+  { to: '/regulatory', key: 'nav.regulatory', icon: BookOpen },
+  { to: '/learn', key: 'nav.learn', icon: GraduationCap },
 ]
 
 const bottomNavItems = [
-  { to: '/settings', name: 'Settings', icon: Settings },
+  { to: '/settings', key: 'nav.settings', icon: Settings },
 ]
 
 function isActive(item) {
@@ -49,8 +51,9 @@ function toggleSidebar() {
   <div class="app-shell">
     <aside class="sidebar" :class="{ 'sidebar--collapsed': sidebarCollapsed }">
       <div class="sidebar-header">
-        <span v-if="!sidebarCollapsed" class="logo-text">OpenQC</span>
-        <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+        <img v-if="!sidebarCollapsed" src="@/assets/ksc-logo.svg" alt="LabQC" class="logo-img" />
+        <span v-else class="logo-icon">LQ</span>
+        <button class="sidebar-toggle" @click="toggleSidebar" :title="sidebarCollapsed ? t('nav.expandSidebar') : t('nav.collapseSidebar')">
           <PanelLeftOpen v-if="sidebarCollapsed" :size="18" :stroke-width="1.75" />
           <PanelLeftClose v-else :size="18" :stroke-width="1.75" />
         </button>
@@ -62,10 +65,10 @@ function toggleSidebar() {
           :to="item.to"
           class="nav-link"
           :class="{ 'nav-link--active': isActive(item) }"
-          :title="sidebarCollapsed ? item.name : undefined"
+          :title="sidebarCollapsed ? t(item.key) : undefined"
         >
           <component :is="item.icon" :size="18" :stroke-width="1.75" />
-          <span v-if="!sidebarCollapsed">{{ item.name }}</span>
+          <span v-if="!sidebarCollapsed">{{ t(item.key) }}</span>
         </router-link>
       </nav>
       <div class="sidebar-bottom">
@@ -76,10 +79,10 @@ function toggleSidebar() {
             :to="item.to"
             class="nav-link"
             :class="{ 'nav-link--active': isActive(item) }"
-            :title="sidebarCollapsed ? item.name : undefined"
+            :title="sidebarCollapsed ? t(item.key) : undefined"
           >
             <component :is="item.icon" :size="18" :stroke-width="1.75" />
-            <span v-if="!sidebarCollapsed">{{ item.name }}</span>
+            <span v-if="!sidebarCollapsed">{{ t(item.key) }}</span>
           </router-link>
         </nav>
       </div>
@@ -125,12 +128,17 @@ function toggleSidebar() {
   padding: 16px 8px;
 }
 
-.logo-text {
-  font-size: 18px;
-  font-weight: 600;
+.logo-img {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-icon {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text-primary);
-  letter-spacing: -0.02em;
-  white-space: nowrap;
+  letter-spacing: 0.05em;
 }
 
 .sidebar-toggle {

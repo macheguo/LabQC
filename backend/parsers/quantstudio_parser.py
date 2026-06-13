@@ -12,6 +12,9 @@ from backend.parsers.base_parser import BaseParser
 # Column names that signal a QuantStudio export
 _QS_MARKER_COLUMNS = {"Well", "Well Position", "Sample Name", "Target Name", "CT"}
 _QS_MARKER_COLUMNS_ALT = {"Well", "Well Position", "Sample Name", "Target Name", "Ct"}
+# Chinese-localized QuantStudio column variants
+_QS_MARKER_COLUMNS_CN = {"孔位", "样品名称", "靶标名称", "CT"}
+_QS_MARKER_COLUMNS_CN_ALT = {"孔位", "样品名称", "靶标名称", "Ct"}
 
 
 class QuantStudioParser(BaseParser):
@@ -38,7 +41,12 @@ class QuantStudioParser(BaseParser):
                 if cell.value is not None:
                     headers.add(str(cell.value).strip())
             wb.close()
-            return _QS_MARKER_COLUMNS.issubset(headers) or _QS_MARKER_COLUMNS_ALT.issubset(headers)
+            return (
+                _QS_MARKER_COLUMNS.issubset(headers)
+                or _QS_MARKER_COLUMNS_ALT.issubset(headers)
+                or _QS_MARKER_COLUMNS_CN.issubset(headers)
+                or _QS_MARKER_COLUMNS_CN_ALT.issubset(headers)
+            )
         except Exception:
             return False
 
@@ -70,13 +78,44 @@ class QuantStudioParser(BaseParser):
         for idx, h in enumerate(headers):
             col_map[h] = idx
 
-        # Determine CT column name (may be "CT" or "Ct")
-        ct_col = "CT" if "CT" in col_map else "Ct" if "Ct" in col_map else None
-        target_col = "Target Name" if "Target Name" in col_map else None
-        sample_col = "Sample Name" if "Sample Name" in col_map else None
-        well_col = "Well" if "Well" in col_map else None
-        ct_mean_col = "Ct Mean" if "Ct Mean" in col_map else "CT Mean" if "CT Mean" in col_map else None
-        ct_sd_col = "Ct SD" if "Ct SD" in col_map else "CT SD" if "CT SD" in col_map else None
+        # Determine column names (English or Chinese variants)
+        ct_col = None
+        target_col = None
+        sample_col = None
+        well_col = None
+        ct_mean_col = None
+        ct_sd_col = None
+
+        # CT column
+        for c in ("CT", "Ct"):
+            if c in col_map:
+                ct_col = c
+                break
+        # Target column
+        for c in ("Target Name", "靶标名称"):
+            if c in col_map:
+                target_col = c
+                break
+        # Sample column
+        for c in ("Sample Name", "样品名称"):
+            if c in col_map:
+                sample_col = c
+                break
+        # Well column
+        for c in ("Well", "孔位"):
+            if c in col_map:
+                well_col = c
+                break
+        # Ct Mean column
+        for c in ("Ct Mean", "CT Mean", "Ct均值", "CT均值"):
+            if c in col_map:
+                ct_mean_col = c
+                break
+        # Ct SD column
+        for c in ("Ct SD", "CT SD", "Ct标准差", "CT标准差"):
+            if c in col_map:
+                ct_sd_col = c
+                break
 
         parsed_rows: list[dict] = []
         for row in rows_iter:
@@ -150,6 +189,7 @@ class QuantStudioParser(BaseParser):
 def _derive_control_level(sample_name: str) -> str:
     """Best-effort mapping of a sample name to L1/L2/L3."""
     lower = sample_name.lower()
+    # English patterns
     for tag in ("l1", "level 1", "low", "level1"):
         if tag in lower:
             return "L1"
@@ -157,6 +197,16 @@ def _derive_control_level(sample_name: str) -> str:
         if tag in lower:
             return "L2"
     for tag in ("l3", "level 3", "high", "level3"):
+        if tag in lower:
+            return "L3"
+    # Chinese patterns
+    for tag in ("水平1", "水平一", "低值", "低"):
+        if tag in lower:
+            return "L1"
+    for tag in ("水平2", "水平二", "中值", "中", "正常"):
+        if tag in lower:
+            return "L2"
+    for tag in ("水平3", "水平三", "高值", "高", "异常"):
         if tag in lower:
             return "L3"
     return sample_name or "Unknown"

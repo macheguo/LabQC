@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRAGStore } from '@/stores/ragStore'
 import PageHeader from '@/components/shared/PageHeader.vue'
 import IngestionStatus from '@/components/rag/IngestionStatus.vue'
@@ -8,6 +9,7 @@ import AnswerCard from '@/components/rag/AnswerCard.vue'
 import { Button } from '@/components/ui/button'
 import { MessageSquare } from 'lucide-vue-next'
 
+const { t } = useI18n()
 const store = useRAGStore()
 
 const isCorpusReady = () =>
@@ -37,8 +39,8 @@ onMounted(() => {
 <template>
   <div class="view">
     <PageHeader
-      title="Regulatory Assistant"
-      subtitle="AI-powered regulatory guidance and document search"
+      :title="t('regulatory.title')"
+      :subtitle="t('regulatory.subtitle')"
     />
 
     <div class="rag-content">
@@ -61,7 +63,7 @@ onMounted(() => {
       <!-- Error display -->
       <div v-if="store.error" class="error-strip">
         <p class="error-strip__text">{{ store.error }}</p>
-        <Button variant="ghost" size="sm" @click="store.clearError()">Dismiss</Button>
+        <Button variant="ghost" size="sm" @click="store.clearError()">{{ t('regulatory.dismiss') }}</Button>
       </div>
 
       <!-- Answer card -->
@@ -80,14 +82,14 @@ onMounted(() => {
       >
         <MessageSquare :size="28" :stroke-width="1.25" class="empty-state__icon" />
         <p class="empty-state__text">
-          Ask a question about regulatory standards, compliance requirements, or QC guidelines.
+          {{ t('regulatory.emptyState') }}
         </p>
       </div>
 
       <!-- Loading indicator -->
       <div v-if="store.loading" class="loading-state">
         <div class="loading-state__bar"></div>
-        <p class="loading-state__text">Searching regulatory documents...</p>
+        <p class="loading-state__text">{{ t('regulatory.searching') }}</p>
       </div>
     </div>
   </div>

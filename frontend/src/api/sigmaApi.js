@@ -1,6 +1,6 @@
 import { throwIfError } from './helpers'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = '/openqc'
 
 export async function calculateSigma(sigmaInputs) {
   const res = await fetch(`${BASE_URL}/sigma/calculate`, {
