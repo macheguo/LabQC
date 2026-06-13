@@ -3,182 +3,172 @@
 
 <template>
   <div class="learn-content">
-    <h1>Chapter 5: Audit Trail and Regulatory Compliance</h1>
-    <p class="chapter-subtitle">How LabQC ensures data integrity through cryptographic audit trails.</p>
+    <h1>第五章：审计追踪与法规合规</h1>
+    <p class="chapter-subtitle">LabQC 如何通过密码学审计追踪保障数据完整性。</p>
 
-    <h2>Why Audit Trails Matter</h2>
+    <h2>审计追踪为何重要</h2>
     <p>
-      An audit trail is a chronological record of all activities that affect data within a system. In clinical
-      laboratories, audit trails serve two critical purposes: they enable <strong>accountability</strong> (who did
-      what, and when) and they enable <strong>integrity verification</strong> (has any data been altered after the fact).
+      审计追踪是系统内所有影响数据的活动的按时间顺序记录。在临床实验室中，审计追踪服务于两个关键目的：
+      <strong>可追溯性</strong>（谁在何时做了什么）和<strong>完整性验证</strong>（数据是否事后被篡改）。
     </p>
     <p>
-      Regulatory frameworks worldwide require robust audit trails for any system that generates, processes, or stores
-      data used for clinical decision-making:
+      全球法规框架要求任何生成、处理或存储用于临床决策数据的系统必须具备健全的审计追踪：
     </p>
 
     <table>
       <thead>
         <tr>
-          <th>Standard</th>
-          <th>Audit Trail Requirements</th>
+          <th>标准/法规</th>
+          <th>审计追踪要求</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>ISO 15189:2022</strong></td>
-          <td>Section 7.11.3 requires the laboratory to maintain records of all changes to controlled documents and data, including who made the change and when.</td>
+          <td>第7.11.3条要求实验室维护所有受控文件和数据变更记录，包括变更人和时间。</td>
         </tr>
         <tr>
           <td><strong>CE-IVD / IVDR</strong></td>
-          <td>Annex I, Section 16 requires traceability of all data and processes. Software used for IVD purposes must maintain audit trails.</td>
+          <td>附录I第16条要求所有数据和流程具有可追溯性。用于IVD目的的软件必须维护审计追踪。</td>
         </tr>
         <tr>
           <td><strong>CDSCO</strong></td>
-          <td>Medical Device Rules 2017 (India) require maintenance of records demonstrating compliance with quality management system requirements, aligned with ISO 13485.</td>
+          <td>印度2017医疗器械规则要求维护符合质量管理体系要求的记录，与ISO 13485一致。</td>
         </tr>
         <tr>
           <td><strong>21 CFR Part 11 (FDA)</strong></td>
-          <td>US FDA regulation for electronic records requires computer-generated, time-stamped audit trails that record the date, time, operator, and nature of changes.</td>
+          <td>美国FDA电子记录条例要求计算机生成带时间戳的审计追踪，记录日期、时间、操作人和变更性质。</td>
         </tr>
         <tr>
           <td><strong>CAP</strong></td>
-          <td>Accreditation checklists require documentation of all corrective actions, instrument maintenance, and QC decisions.</td>
+          <td>认可清单要求记录所有纠正措施、仪器维护和QC决策。</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>SHA-256 File Hashing Explained</h2>
+    <h2>SHA-256 文件哈希详解</h2>
     <p>
-      LabQC uses <strong>SHA-256</strong> (Secure Hash Algorithm, 256-bit) to create a unique digital fingerprint
-      of every audit trail entry. SHA-256 is a cryptographic hash function that takes any input data and produces a
-      fixed-length, 256-bit (64 hexadecimal character) output.
+      LabQC 使用 <strong>SHA-256</strong>（安全哈希算法，256位）为每个审计追踪条目创建唯一的数字
+      指纹。SHA-256是一种密码学哈希函数，接受任意输入数据并产生固定长度的256位（64个十六进制字符）输出。
     </p>
 
-    <h3>Key Properties</h3>
+    <h3>关键特性</h3>
     <ul>
       <li>
-        <strong>Deterministic:</strong> The same input always produces the same hash. If you hash the same audit
-        trail entry twice, you get the same result.
+        <strong>确定性：</strong>同样的输入总是产生同样的哈希。对同一条审计追踪条目哈希两次，
+        得到相同结果。
       </li>
       <li>
-        <strong>Avalanche effect:</strong> Even a tiny change to the input (a single character) produces a
-        completely different hash. This makes tampering immediately detectable.
+        <strong>雪崩效应：</strong>输入中即使最微小的变化（单个字符）也会产生完全不同的哈希。
+        这使得篡改立即可以被发现。
       </li>
       <li>
-        <strong>One-way function:</strong> You cannot reverse-engineer the original data from the hash. The hash
-        proves what the data was, without exposing the data itself.
+        <strong>单向函数：</strong>无法从哈希值逆向推导出原始数据。哈希证明了数据曾经是什么，
+        却不会暴露数据本身。
       </li>
       <li>
-        <strong>Collision resistant:</strong> It is computationally infeasible to find two different inputs that
-        produce the same hash.
+        <strong>抗碰撞性：</strong>在计算上不可能找到两个不同的输入产生相同的哈希值。
       </li>
     </ul>
 
     <pre class="diagram">
-  SHA-256 Hashing Example:
+  SHA-256 哈希示例：
 
-  Input: "QC run uploaded: run_id=42, file=sample_qc.xlsx, user=labtech1"
+  输入: "QC run uploaded: run_id=42, file=sample_qc.xlsx, user=labtech1"
 
-  SHA-256 Hash:
+  SHA-256 哈希:
   a7f3b2c1d4e5f6a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2
 
-  Now change ONE character ("run_id=43" instead of "run_id=42"):
+  现在修改一个字符（"run_id=43" 替代 "run_id=42"）：
 
-  Input: "QC run uploaded: run_id=43, file=sample_qc.xlsx, user=labtech1"
+  输入: "QC run uploaded: run_id=43, file=sample_qc.xlsx, user=labtech1"
 
-  SHA-256 Hash:
+  SHA-256 哈希:
   e1d2c3b4a5f6e7d8c9b0a1f2e3d4c5b6a7f8e9d0c1b2a3f4e5d6c7b8a9f0e1d2
 
-  Completely different hash — tampering is immediately evident.
+  哈希值完全不同——篡改立即可见。
     </pre>
 
-    <h2>Hash Chain Integrity</h2>
+    <h2>哈希链完整性</h2>
     <p>
-      LabQC does not just hash individual entries — it creates a <strong>hash chain</strong> where each entry's
-      hash includes the hash of the previous entry. This creates an unbreakable chronological chain similar to
-      blockchain technology.
+      LabQC 不仅对单个条目做哈希——它创建了<strong>哈希链</strong>，每个条目的哈希都包含前一
+      条目的哈希值。这创建了一条类似于区块链技术的不可打破的时间顺序链。
     </p>
 
     <pre class="diagram">
-  Hash Chain Structure:
+  哈希链结构：
 
-  Entry 1                    Entry 2                    Entry 3
+  条目 1                     条目 2                     条目 3
   +---------------------+   +---------------------+   +---------------------+
-  | Action: Upload       |   | Action: Analyze      |   | Action: Export       |
-  | Timestamp: 10:00:01  |   | Timestamp: 10:00:05  |   | Timestamp: 10:00:12  |
-  | User: labtech1       |   | User: labtech1       |   | User: labtech1       |
-  | Previous: 000000     |   | Previous: a7f3b2...  |   | Previous: e1d2c3...  |
+  | 操作: 上传            |   | 操作: 分析            |   | 操作: 导出            |
+  | 时间戳: 10:00:01     |   | 时间戳: 10:00:05     |   | 时间戳: 10:00:12     |
+  | 用户: labtech1       |   | 用户: labtech1       |   | 用户: labtech1       |
+  | 前一哈希: 000000     |   | 前一哈希: a7f3b2...  |   | 前一哈希: e1d2c3...  |
   |                      |   |                      |   |                      |
-  | Hash: a7f3b2...      |-->| Hash: e1d2c3...      |-->| Hash: b4c5d6...      |
+  | 哈希: a7f3b2...      |-->| 哈希: e1d2c3...      |-->| 哈希: b4c5d6...      |
   +---------------------+   +---------------------+   +---------------------+
 
-  Each entry's hash is computed from:
-    - The entry's own data (action, timestamp, user, details)
-    - The hash of the PREVIOUS entry
+  每个条目的哈希由以下计算得出：
+    - 条目自身数据（操作、时间戳、用户、详情）
+    - 前一条目的哈希值
 
-  This means modifying ANY entry invalidates ALL subsequent hashes.
+  这意味着修改任何一个条目将导致所有后续哈希全部失效。
     </pre>
 
-    <h3>Why This Matters</h3>
+    <h3>为什么这很重要</h3>
     <p>
-      Suppose someone attempts to modify Entry 2 (e.g., changing an analysis result). The modification would change
-      Entry 2's hash. But Entry 3's hash was computed using Entry 2's original hash. Now Entry 3's recorded hash
-      no longer matches what you would compute from the current data — the chain is broken. The tampering is
-      detected automatically.
+      假设有人试图修改条目2（例如改变某个分析结果）。该修改将使条目2的哈希发生变化。但条目3的哈希
+      是用条目2的原始哈希计算得出的。现在条目3中记录的哈希不再与根据当前数据重新计算的值匹配——
+      链条断裂，篡改被自动检测。
     </p>
     <p>
-      To successfully tamper with the audit trail, an attacker would need to recompute the hashes of the modified
-      entry and <em>every subsequent entry</em> in the chain. LabQC's verification process detects this by
-      recomputing the entire chain from scratch and comparing against the stored hashes.
+      若要成功篡改审计追踪，攻击者需要重新计算被修改条目<em>以及之后每一条条目</em>的哈希。
+      LabQC的验证过程通过从头重新计算整条链条并与存储的哈希值比对来检测篡改。
     </p>
 
-    <h2>Tamper Detection</h2>
+    <h2>篡改检测</h2>
     <p>
-      LabQC provides built-in tamper detection that can be run at any time:
+      LabQC 提供内置的篡改检测功能，可随时运行：
     </p>
     <ol>
-      <li>The system retrieves all audit trail entries in chronological order.</li>
-      <li>Starting from the first entry, it recomputes the SHA-256 hash using the entry's data and the previous entry's hash.</li>
-      <li>The recomputed hash is compared against the stored hash for each entry.</li>
-      <li>If any hash does not match, the system identifies the exact entry where the chain was broken and flags it as potentially tampered.</li>
+      <li>系统按时间顺序取出所有审计追踪条目。</li>
+      <li>从第一条开始，使用条目自身数据和前一条哈希值重新计算SHA-256哈希。</li>
+      <li>将重新计算的哈希与每个条目中存储的哈希值进行比对。</li>
+      <li>若任何哈希不匹配，系统会识别出链条断裂的确切条目，并将其标记为潜在被篡改。</li>
     </ol>
 
     <div class="warning-box">
-      <strong>What happens when tampering is detected:</strong> LabQC displays a clear warning identifying
-      which entry in the chain has been compromised. The laboratory should immediately investigate, document the
-      finding, and report it to the quality manager. Any patient results associated with the tampered period should
-      be reviewed.
+      <strong>检测到篡改时如何应对：</strong>LabQC 显示明确的警告，指出链条中哪条记录
+      受到了影响。实验室应立即展开调查，记录发现结果，并向质量负责人报告。与被篡改时间段
+      关联的所有患者结果都应进行复核。
     </div>
 
-    <h2>Regulatory Export</h2>
+    <h2>法规导出</h2>
     <p>
-      During regulatory audits and accreditation inspections, auditors need access to complete, verifiable audit
-      trails. LabQC supports exporting audit trail data in formats suitable for regulatory review:
+      在法规审核和认可评审中，审核员需要访问完整、可验证的审计追踪。LabQC支持以适合法规审查
+      的格式导出审计追踪数据：
     </p>
     <ul>
       <li>
-        <strong>Complete chronological record:</strong> Every action performed in the system — uploads, analyses,
-        exports, configuration changes — with timestamps, user identification, and details.
+        <strong>完整的时间顺序记录：</strong>系统内执行的每一项操作——上传、分析、导出、
+        配置变更——均带有时间戳、用户标识和详细信息。
       </li>
       <li>
-        <strong>Hash verification report:</strong> A summary showing the integrity status of the entire audit chain,
-        confirming that no entries have been modified.
+        <strong>哈希验证报告：</strong>显示整个审计链条完整性状态的摘要，确认没有条目被修改。
       </li>
       <li>
-        <strong>Filtered views:</strong> The ability to filter by date range, user, action type, or specific
-        assay/instrument — so auditors can focus on the relevant time period.
+        <strong>筛选视图：</strong>可按日期范围、用户、操作类型或特定检测/仪器筛选，
+        使审核员能够聚焦相关时间段。
       </li>
       <li>
-        <strong>Export formats:</strong> Data can be exported as structured files (CSV, JSON) that auditors can
-        independently verify.
+        <strong>导出格式：</strong>数据可以导出为结构化文件（CSV、JSON），供审核员独立验证。
       </li>
     </ul>
 
     <div class="info-box">
-      <strong>Best practice:</strong> Run the audit trail integrity check regularly (at least monthly) and before
-      any regulatory inspection. Document the verification results as part of your quality management system.
-      This proactive approach demonstrates to auditors that your laboratory takes data integrity seriously.
+      <strong>最佳实践：</strong>定期运行审计追踪完整性检查（至少每月一次），并在任何法规检查
+      之前进行。将验证结果记录作为质量管理体系的组成部分。这种主动做法向审核员表明，您的实验室
+      认真对待数据完整性。
     </div>
   </div>
 </template>

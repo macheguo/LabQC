@@ -31,7 +31,7 @@ function toggleSource(index) {
     </div>
 
     <div v-if="sources.length > 0" class="answer-card__sources">
-      <div class="answer-card__sources-label">Sources</div>
+      <div class="answer-card__sources-label">参考来源</div>
       <div class="answer-card__source-list">
         <div
           v-for="(source, idx) in sources"
@@ -60,7 +60,7 @@ function toggleSource(index) {
               {{ source.section }}
             </p>
             <p class="source-preview__text">
-              {{ source.chunk_preview || 'No preview available.' }}
+              {{ source.chunk_preview || '暂无预览' }}
             </p>
           </div>
         </div>
@@ -68,7 +68,7 @@ function toggleSource(index) {
     </div>
 
     <div v-if="modelUsed" class="answer-card__meta">
-      Model: {{ modelUsed }}
+      使用模型: {{ modelUsed }}
     </div>
   </div>
 </template>

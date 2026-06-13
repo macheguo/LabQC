@@ -55,6 +55,8 @@ def init_db() -> None:
     from backend.models import audit_models  # noqa: F401
     from backend.models import validation_models  # noqa: F401
     from backend.models import settings_models  # noqa: F401
+    from backend.models import eqa_models  # noqa: F401
+    from backend.auth import User  # noqa: F401
 
     _DB_DIR.mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bind=engine)

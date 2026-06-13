@@ -4,184 +4,175 @@ import PlotlyLinearityDiagram from './PlotlyLinearityDiagram.vue'
 
 <template>
   <div class="learn-content">
-    <h1>Chapter 4: Assay Validation Fundamentals</h1>
-    <p class="chapter-subtitle">The essential validation studies every PCR assay must pass before clinical use.</p>
+    <h1>第四章：检测验证基础</h1>
+    <p class="chapter-subtitle">每个PCR检测在投入临床使用前必须通过的基本验证研究。</p>
 
-    <h2>Why Validation Is Required</h2>
+    <h2>为什么需要验证</h2>
     <p>
-      Assay validation is the process of demonstrating, through documented evidence, that an analytical method
-      consistently produces results that meet predetermined acceptance criteria. No PCR assay should be used for
-      patient testing until it has been validated in the laboratory where it will be used.
+      检测验证是通过经文件记录的客观证据，证明分析方法能够持续产生符合预定接受标准的结果的过程。
+      任何PCR检测在其将使用的实验室内完成验证之前，都不应用于患者检测。
     </p>
     <p>
-      Even commercially available IVD kits require verification (a subset of validation) when implemented in a new
-      laboratory. This is because performance can be affected by local conditions: the specific instrument model,
-      environmental factors, operator technique, water quality, and sample types encountered in that particular setting.
+      即使是市售的IVD试剂盒，在进入新实验室使用时也需要进行确认（验证的一个子集）。这是因为性能
+      会受到当地条件的影响：具体的仪器型号、环境因素、操作人员技术、水质以及该特定环境中的样本类型。
     </p>
     <p>
-      Regulatory standards — ISO 15189:2022 (Section 7.3), CLIA, CE-IVD (IVDR), and CDSCO — all require documented
-      validation or verification before clinical use. Failure to validate is one of the most common citations in
-      laboratory accreditation inspections.
+      法规标准——ISO 15189:2022（第7.3条）、CLIA、CE-IVD (IVDR) 和 CDSCO——均要求在临床使用前
+      有文件化的验证或确认记录。未经验证是实验室认可评审中最常见的缺陷项之一。
     </p>
 
-    <h2>Limit of Detection (LOD)</h2>
+    <h2>检出限（LOD）</h2>
     <p>
-      The <strong>Limit of Detection (LOD)</strong> is the lowest amount of target analyte that can be reliably
-      distinguished from a blank (no-target) sample. "Reliably" typically means detected in at least 95% of
-      replicates at that concentration.
+      <strong>检出限（Limit of Detection, LOD）</strong>是能够可靠地与空白（无目标物）样本区分开的
+      目标分析物最低量。"可靠"通常指在该浓度下至少95%的重复样本被检出。
     </p>
 
-    <h3>How LOD Is Calculated</h3>
+    <h3>LOD 如何计算</h3>
     <p>
-      The classical approach for calculating LOD involves measuring blank or near-blank samples:
+      计算LOD的经典方法包括测量空白或接近空白的样本：
     </p>
     <pre class="diagram">
-  LOD Calculation:
+  LOD 计算：
 
-  LOD = Mean_blank + 3 * SD_blank
+  LOD = 空白均值 + 3 × 空白标准差(SD)
 
-  Where:
-    Mean_blank = Average Ct (or signal) of blank samples
-    SD_blank   = Standard deviation of blank measurements
-    3          = Multiplier for 99.7% confidence
+  其中:
+    空白均值 = 空白样本的平均 Ct 值（或其他信号）
+    空白SD    = 空白测量值的标准差
+    3         = 对应于99.7%置信水平的乘数
 
-  Alternative (probit analysis):
-    Test serial dilutions near the expected LOD.
-    At each concentration, run 20+ replicates.
-    LOD = concentration detected in 95% of replicates
-    (determined by probit regression).
+  替代方法（概率单位分析 Probit）：
+    在预期LOD附近测试系列稀释样本。
+    每个浓度运行20+个重复。
+    LOD = 95%重复样本检出目标物的浓度
+    （通过Probit回归确定）。
     </pre>
 
     <p>
-      For qualitative PCR assays (detected/not detected), LOD is often expressed as copies/mL or IU/mL. For
-      quantitative assays, LOD represents the lowest reliably quantifiable concentration, though LOQ (below) is
-      more appropriate for quantification.
+      对于定性PCR检测（检出/未检出），LOD通常表示为 copies/mL 或 IU/mL。对于定量检测，
+      LOD代表可被可靠定量的最低浓度，不过LOQ（见下文）更适合定量目的。
     </p>
 
-    <h3>Practical Considerations</h3>
+    <h3>实操注意事项</h3>
     <ul>
-      <li>Use at least 20 replicate measurements of blank samples to calculate Mean_blank and SD_blank.</li>
-      <li>If the assay does not produce a Ct value for blank samples (undetermined), use a probit-based approach with serial dilutions instead.</li>
-      <li>The LOD should be established in the sample matrix (e.g., extracted nucleic acid from clinical specimens), not in water.</li>
-      <li>Report LOD in clinically meaningful units (copies/mL, IU/mL) rather than Ct values.</li>
+      <li>使用至少20次空白样本的重复测量来计算空白均值和空白SD。</li>
+      <li>若检测对空白样本不产生Ct值（未测定），采用基于系列稀释的Probit方法代替。</li>
+      <li>LOD应在样本基质（如从临床标本提取的核酸）中建立，而非在水中。</li>
+      <li>以有临床意义的单位（copies/mL、IU/mL）报告LOD，而非Ct值。</li>
     </ul>
 
-    <h2>Limit of Quantification (LOQ)</h2>
+    <h2>定量限（LOQ）</h2>
     <p>
-      The <strong>Limit of Quantification (LOQ)</strong> is the lowest concentration at which the analyte can be
-      reliably quantified with acceptable precision. While LOD tells you "can I detect it?", LOQ tells you
-      "can I measure it accurately enough to report a number?"
+      <strong>定量限（Limit of Quantification, LOQ）</strong>是能够以可接受的精密度可靠定量的
+      最低浓度。LOD回答的是"能检出吗？"，而LOQ回答的是"能测出足够准确的数值用来报告吗？"
     </p>
     <p>
-      LOQ is determined using a CV threshold approach:
+      LOQ通过CV阈值法确定：
     </p>
     <pre class="diagram">
-  LOQ Determination (CV Threshold Method):
+  LOQ 确定（CV 阈值法）：
 
   CV (%)
     50 |  *
     40 |     *
     30 |        *
-    20 |           *  - - - - - - - - - - CV threshold (e.g., 20%)
+    20 |           *  - - - - - - - - - - CV阈值（如 20%）
     15 |              *
     10 |                 *     *     *
      5 |                          *
-       +------+------+------+------+----> Concentration
+       +------+------+------+------+----> 浓度
        LOD          LOQ
 
-  1. Prepare serial dilutions spanning the low end of the range.
-  2. Measure each dilution in at least 10 replicates.
-  3. Calculate CV at each concentration.
-  4. LOQ = lowest concentration where CV is below the threshold.
+  1. 配制涵盖范围低端的系列稀释液。
+  2. 每种稀释液至少测10个重复。
+  3. 计算每个浓度的CV。
+  4. LOQ = CV低于阈值的最低浓度。
 
-  Common CV thresholds:
-    - 20% for most molecular assays
-    - 15% for high-precision requirements
-    - 25% for screening assays
+  常见CV阈值：
+    - 大多数分子检测：20%
+    - 高精度要求：15%
+    - 筛查类检测：25%
     </pre>
 
     <div class="info-box">
-      <strong>Note:</strong> LOQ is always equal to or higher than LOD. You can detect an analyte at concentrations
-      below LOQ, but you cannot reliably quantify it — results below LOQ should be reported as "detected, below
-      the limit of quantification."
+      <strong>注意：</strong>LOQ总是等于或高于LOD。你可以在低于LOQ的浓度检出分析物，
+      但无法可靠定量——低于LOQ的结果应报告为"检出，低于定量限"。
     </div>
 
-    <h2>Precision</h2>
+    <h2>精密度</h2>
     <p>
-      <strong>Precision</strong> measures the closeness of agreement between independent measurements obtained under
-      stipulated conditions. In PCR validation, precision is assessed at two levels:
+      <strong>精密度</strong>衡量在既定条件下获得的独立测量值之间的接近程度。在PCR验证中，
+      精密度从两个层面进行评估：
     </p>
 
-    <h3>Intra-Run Precision (Repeatability)</h3>
+    <h3>批内精密度（重复性）</h3>
     <p>
-      Repeatability measures the variation when the same sample is tested multiple times within a single analytical
-      run, by the same operator, on the same instrument, using the same reagents.
+      重复性衡量同一样本在同一分析批内、由同一操作人员、在同一台仪器上使用同一试剂多次检测的变异。
     </p>
     <ul>
-      <li>Test at least 2-3 concentration levels (low, medium, high).</li>
-      <li>Run a minimum of 10 replicates at each level within a single run.</li>
-      <li>Calculate mean, SD, and CV for each level.</li>
-      <li>Typical acceptance: CV &lt; 5% for quantitative PCR assays (Ct values).</li>
+      <li>至少测试2-3个浓度水平（低、中、高）。</li>
+      <li>每个水平单批内至少运行10个重复。</li>
+      <li>计算每个水平的均值、SD和CV。</li>
+      <li>定量PCR检测（Ct值）典型接受标准：CV &lt; 5%。</li>
     </ul>
 
-    <h3>Inter-Run Precision (Reproducibility)</h3>
+    <h3>批间精密度（再现性）</h3>
     <p>
-      Reproducibility measures variation across different runs, days, operators, and potentially different instruments
-      or reagent lots. It captures the total variation that affects patient results in routine practice.
+      再现性衡量跨不同批次、日期、操作人员乃至不同仪器或试剂批号的变异。
+      它捕获了在常规实践中影响患者结果的总变异。
     </p>
     <ul>
-      <li>Test the same concentration levels used for repeatability.</li>
-      <li>Run at least 20 measurements at each level, spread across at least 10 different days.</li>
-      <li>Vary conditions: different operators, different aliquots of reagents, different times of day.</li>
-      <li>Calculate mean, SD, and CV for each level across all runs.</li>
-      <li>Typical acceptance: CV &lt; 10% for quantitative PCR assays (Ct values).</li>
+      <li>使用与重复性相同的浓度水平进行测试。</li>
+      <li>每个水平至少运行20次测量，跨至少10个不同日期。</li>
+      <li>变换条件：不同操作人员、不同试剂分装、不同时间段。</li>
+      <li>计算每个水平跨所有批次的均值、SD和CV。</li>
+      <li>定量PCR检测（Ct值）典型接受标准：CV &lt; 10%。</li>
     </ul>
 
     <table>
       <thead>
         <tr>
-          <th>Parameter</th>
-          <th>Intra-Run (Repeatability)</th>
-          <th>Inter-Run (Reproducibility)</th>
+          <th>参数</th>
+          <th>批内（重复性）</th>
+          <th>批间（再现性）</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Conditions</td>
-          <td>Same run, operator, reagents, day</td>
-          <td>Different runs, days, operators</td>
+          <td>条件</td>
+          <td>同一批、同一操作人、同一试剂、同一天</td>
+          <td>不同批次、不同日期、不同操作人</td>
         </tr>
         <tr>
-          <td>Minimum replicates</td>
-          <td>10 per level</td>
-          <td>20 per level (across 10+ days)</td>
+          <td>最少重复数</td>
+          <td>每水平10个</td>
+          <td>每水平20个（跨10天以上）</td>
         </tr>
         <tr>
-          <td>Typical CV acceptance</td>
+          <td>典型CV接受标准</td>
           <td>&lt; 5%</td>
           <td>&lt; 10%</td>
         </tr>
         <tr>
-          <td>What it measures</td>
-          <td>Instrument and pipetting precision</td>
-          <td>Total method variation in routine use</td>
+          <td>衡量内容</td>
+          <td>仪器和移液精密度</td>
+          <td>常规使用中的总方法变异</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>Linearity</h2>
+    <h2>线性</h2>
     <p>
-      <strong>Linearity</strong> is the ability of the assay to produce results that are directly proportional to the
-      concentration of the analyte across the reportable range. For quantitative PCR, a linear assay produces Ct
-      values that decrease by a consistent amount for each log-unit increase in target concentration.
+      <strong>线性</strong>是指检测在整个可报告范围内产生与目标物浓度成正比结果的能力。
+      对于定量PCR，线性检测产生的Ct值随目标物浓度每增加一个对数单位而以一致的数量递减。
     </p>
 
-    <h3>How to Assess Linearity</h3>
+    <h3>如何评估线性</h3>
     <ol>
-      <li>Prepare a serial dilution series spanning the expected reportable range (e.g., 10<sup>1</sup> to 10<sup>8</sup> copies/mL).</li>
-      <li>Measure each dilution in triplicate (minimum).</li>
-      <li>Plot observed values (Ct or log copies) against expected values (known concentrations).</li>
-      <li>Perform linear regression analysis.</li>
+      <li>配制覆盖预期可报告范围的系列稀释液（如 10<sup>1</sup> 至 10<sup>8</sup> copies/mL）。</li>
+      <li>每种稀释液至少三复孔测量。</li>
+      <li>将实测值（Ct或log copies）对预期值（已知浓度）作图。</li>
+      <li>进行线性回归分析。</li>
     </ol>
 
     <PlotlyLinearityDiagram
@@ -192,85 +183,85 @@ import PlotlyLinearityDiagram from './PlotlyLinearityDiagram.vue'
       :slope="-3.35" :intercept="38.6" :rSquared="0.9983"
     />
 
-    <h3>Key Statistics</h3>
+    <h3>关键统计量</h3>
     <pre class="diagram">
-  Key metrics:
-    R² (coefficient of determination)
-      - Measures how well data fits the regression line
-      - R² >= 0.99 is typically required
-      - R² >= 0.995 is ideal
+  关键指标：
+    R²（决定系数）
+      - 衡量数据点与回归线的拟合程度
+      - 通常要求 R² >= 0.99
+      - R² >= 0.995 为理想值
 
-    Slope
-      - For a perfect PCR assay: slope = -3.32
-        (corresponds to 100% amplification efficiency)
-      - Acceptable range: -3.1 to -3.6
-        (corresponds to 90-110% efficiency)
+    斜率 (Slope)
+      - 理想的PCR检测斜率 = -3.32
+        （对应 100% 扩增效率）
+      - 可接受范围：-3.1 至 -3.6
+        （对应 90-110% 效率）
 
-    y-intercept
-      - Theoretical Ct at 1 copy of target
-      - Used to calculate amplification efficiency:
-        E = (10^(-1/slope) - 1) * 100%
+    y轴截距
+      - 样品含1个目标拷贝时的理论Ct值
+      - 用于计算扩增效率：
+        E = (10^(-1/斜率) - 1) × 100%
     </pre>
 
-    <h3>What "Good Linearity" Looks Like</h3>
+    <h3>"良好线性"的表现</h3>
     <ul>
-      <li><strong>R<sup>2</sup> &ge; 0.99:</strong> Data points closely follow the regression line with minimal scatter.</li>
-      <li><strong>Slope between -3.1 and -3.6:</strong> Amplification efficiency is between 90% and 110%.</li>
-      <li><strong>No systematic deviation:</strong> Residuals (differences between observed and predicted values) should be randomly distributed, not showing a pattern (which would indicate non-linearity).</li>
-      <li><strong>Consistent across the range:</strong> Precision should not degrade significantly at the extremes of the range.</li>
+      <li><strong>R<sup>2</sup> &ge; 0.99：</strong>数据点紧密跟随回归线，离散度最小。</li>
+      <li><strong>斜率在 -3.1 至 -3.6 之间：</strong>扩增效率在90%-110%之间。</li>
+      <li><strong>无系统性偏差：</strong>残差（实测值与预测值之差）应随机分布，不呈现某种模式
+        （若呈现模式则指示非线性）。</li>
+      <li><strong>全范围一致性：</strong>在范围两端的精密度不应显著降低。</li>
     </ul>
 
-    <h2>Defining Acceptance Criteria</h2>
+    <h2>定义接受标准</h2>
     <p>
-      Before running validation experiments, you must define acceptance criteria. These should be:
+      在进行验证实验之前，必须定义接受标准。这些标准应当是：
     </p>
     <ul>
-      <li><strong>Pre-defined:</strong> Written before testing begins, not adjusted after seeing results.</li>
-      <li><strong>Scientifically justified:</strong> Based on clinical requirements, manufacturer claims, or published guidelines.</li>
-      <li><strong>Documented:</strong> Recorded in the validation protocol before experiments start.</li>
+      <li><strong>预先定义的：</strong>在测试开始前书面确定，而非在看到结果后调整。</li>
+      <li><strong>有科学依据的：</strong>基于临床要求、制造商声明或已发布的指南。</li>
+      <li><strong>已记录在案的：</strong>在实验开始前记录于验证方案中。</li>
     </ul>
 
     <table>
       <thead>
         <tr>
-          <th>Validation Study</th>
-          <th>Typical Acceptance Criteria</th>
-          <th>Source</th>
+          <th>验证研究</th>
+          <th>典型接受标准</th>
+          <th>来源</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>LOD</td>
-          <td>&ge; 95% detection at claimed concentration</td>
-          <td>CLSI EP17-A2, manufacturer claim</td>
+          <td>在声称浓度下检出率 &ge; 95%</td>
+          <td>CLSI EP17-A2、制造商声明</td>
         </tr>
         <tr>
           <td>LOQ</td>
-          <td>CV &lt; 20% at claimed concentration</td>
-          <td>Laboratory-defined based on clinical need</td>
+          <td>在声称浓度下 CV &lt; 20%</td>
+          <td>实验室根据临床需求自行确定</td>
         </tr>
         <tr>
-          <td>Repeatability</td>
-          <td>CV &lt; 5% (Ct values)</td>
-          <td>Manufacturer claim or CLSI EP05-A3</td>
+          <td>重复性</td>
+          <td>CV &lt; 5%（Ct值）</td>
+          <td>制造商声明或 CLSI EP05-A3</td>
         </tr>
         <tr>
-          <td>Reproducibility</td>
-          <td>CV &lt; 10% (Ct values)</td>
-          <td>Manufacturer claim or CLSI EP05-A3</td>
+          <td>再现性</td>
+          <td>CV &lt; 10%（Ct值）</td>
+          <td>制造商声明或 CLSI EP05-A3</td>
         </tr>
         <tr>
-          <td>Linearity</td>
-          <td>R<sup>2</sup> &ge; 0.99, slope -3.1 to -3.6</td>
-          <td>CLSI EP06-A, PCR efficiency standards</td>
+          <td>线性</td>
+          <td>R<sup>2</sup> &ge; 0.99，斜率 -3.1 至 -3.6</td>
+          <td>CLSI EP06-A、PCR 效率标准</td>
         </tr>
       </tbody>
     </table>
 
     <div class="info-box">
-      <strong>LabQC tip:</strong> The Validation module allows you to select the type of study (LOD, Precision,
-      Linearity), upload your dataset, and define custom acceptance criteria. LabQC performs the statistical
-      analysis and generates a validation report that can be included directly in your assay validation documentation.
+      <strong>LabQC提示：</strong>验证模块允许你选择研究类型（LOD、精密度、线性），上传数据集，
+      并定义自定义接受标准。LabQC 执行统计分析并生成可直接纳入检测验证文件包的验证报告。
     </div>
   </div>
 </template>

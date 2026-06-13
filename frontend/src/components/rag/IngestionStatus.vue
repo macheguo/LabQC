@@ -34,12 +34,12 @@ const isNotIngested = computed(
       <template v-if="isNotIngested && !ingesting">
         <Database :size="18" :stroke-width="1.75" class="ingestion-status__icon" />
         <div class="ingestion-status__info">
-          <p class="ingestion-status__label">Documents not yet ingested</p>
+          <p class="ingestion-status__label">尚未摄入法规文档</p>
           <p class="ingestion-status__hint">
-            Ingest regulatory documents to enable question answering.
+            请先摄入法规文档（PDF/Word），再开始智能问答。
           </p>
         </div>
-        <Button size="sm" @click="emit('ingest')">Ingest Documents</Button>
+        <Button size="sm" @click="emit('ingest')">摄入文档</Button>
       </template>
 
       <!-- Ingesting state -->
@@ -50,9 +50,9 @@ const isNotIngested = computed(
           class="ingestion-status__icon ingestion-status__icon--spin"
         />
         <div class="ingestion-status__info">
-          <p class="ingestion-status__label">Ingesting documents...</p>
+          <p class="ingestion-status__label">文档摄入中...</p>
           <p class="ingestion-status__hint">
-            This may take a moment. Processing regulatory documents.
+            正在处理法规文档，请稍候。
           </p>
         </div>
       </template>
@@ -61,11 +61,11 @@ const isNotIngested = computed(
       <template v-else-if="isReady">
         <CheckCircle :size="18" :stroke-width="1.75" class="ingestion-status__icon ingestion-status__icon--ready" />
         <div class="ingestion-status__info">
-          <p class="ingestion-status__label">Corpus ready</p>
+          <p class="ingestion-status__label">文档库已就绪</p>
           <p class="ingestion-status__hint">
-            <span v-if="status?.document_count">{{ status.document_count }} documents</span>
+            <span v-if="status?.document_count">{{ status.document_count }} 份文档</span>
             <span v-if="status?.document_count && status?.chunk_count"> / </span>
-            <span v-if="status?.chunk_count">{{ status.chunk_count }} chunks indexed</span>
+            <span v-if="status?.chunk_count">{{ status.chunk_count }} 个片段已索引</span>
           </p>
         </div>
       </template>

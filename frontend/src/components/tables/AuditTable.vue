@@ -1,5 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const props = defineProps({
   entries: {
@@ -53,11 +56,11 @@ function eventTagClass(eventType) {
       <thead>
         <tr>
           <th class="col-id">ID</th>
-          <th class="col-timestamp">Timestamp</th>
-          <th class="col-event">Event Type</th>
-          <th class="col-filename">File Name</th>
-          <th class="col-action">Action</th>
-          <th class="col-hash">Hash</th>
+          <th class="col-timestamp">{{ t('audit.timestamp') }}</th>
+          <th class="col-event">{{ t('audit.eventType') }}</th>
+          <th class="col-filename">{{ t('audit.fileName') }}</th>
+          <th class="col-action">{{ t('audit.actionDetail') }}</th>
+          <th class="col-hash">{{ t('audit.fileHash') }}</th>
         </tr>
       </thead>
       <tbody v-if="loading">
@@ -73,7 +76,7 @@ function eventTagClass(eventType) {
       <tbody v-else-if="entries.length === 0">
         <tr>
           <td colspan="6" class="empty-cell">
-            <p class="empty-text">No audit entries found</p>
+            <p class="empty-text">{{ t('audit.noEntries') }}</p>
           </td>
         </tr>
       </tbody>

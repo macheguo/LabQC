@@ -1,18 +1,38 @@
 """
 LabQC API -- FastAPI application entry point.
 
-Configures CORS, registers all module routers, and exposes a root
-health-check endpoint.  No business logic lives here.
+Configures CORS, registers all module routers, serves frontend static files,
+and exposes a root health-check endpoint.  No business logic lives here.
+
+When running as a standalone Windows executable (PyInstaller), set the
+environment variable LABQC_STANDALONE=1 to enable SPA static file serving
+and disable CORS middleware (single-origin, not needed).
 """
 
+import os
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from backend.db.database import init_db
-from backend.routers import audit, lots, qc, rag, settings, sigma, validation
+from backend.routers import audit, auth, eqa, lis, lots, qc, rag, settings, sigma, validation
+
+# ── Determine execution mode ──────────────────────────────────────────
+def _is_standalone() -> bool:
+    return os.environ.get("LABQC_STANDALONE", "0") == "1"
+
+def _get_dist_dir() -> Path:
+    if _is_standalone():
+        import sys
+        if getattr(sys, "frozen", False):
+            return Path(sys._MEIPASS) / "frontend_dist"
+        return (Path(__file__).resolve().parent.parent / "frontend" / "dist").resolve()
+    return (Path(__file__).resolve().parent.parent / "frontend" / "dist").resolve()
 
 
 @asynccontextmanager
@@ -29,32 +49,86 @@ app = FastAPI(
 )
 
 # ---------------------------------------------------------------------------
-# CORS -- allow the Vite dev server during local development
+# CORS -- allow Vite dev server during development (disabled in standalone)
 # ---------------------------------------------------------------------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+if not _is_standalone():
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # ---------------------------------------------------------------------------
 # Routers
 # ---------------------------------------------------------------------------
+app.include_router(auth.router)
 app.include_router(qc.router)
 app.include_router(sigma.router)
 app.include_router(validation.router)
 app.include_router(audit.router)
 app.include_router(lots.router)
 app.include_router(rag.router)
+app.include_router(eqa.router)
+app.include_router(lis.router)
 app.include_router(settings.router)
 
+# ---------------------------------------------------------------------------
+# Static files & SPA (standalone mode only)
+# ---------------------------------------------------------------------------
+if _is_standalone():
+    dist = _get_dist_dir()
+    if dist.exists():
+        # Mount /assets
+        assets_dir = dist / "assets"
+        if assets_dir.exists():
+            app.mount("/assets", StaticFiles(directory=str(assets_dir)), name="assets")
+
+        # Serve root favicon and icons
+        @app.get("/favicon.svg")
+        async def favicon():
+            fp = dist / "favicon.svg"
+            if fp.exists():
+                return FileResponse(str(fp))
+            return {"status": "not found"}
+
+        @app.get("/icons.svg")
+        async def icons():
+            fp = dist / "icons.svg"
+            if fp.exists():
+                return FileResponse(str(fp))
+            return {"status": "not found"}
+
+        # SPA fallback: serve index.html for all non-API routes
+        from starlette.responses import Response
+
+        @app.middleware("http")
+        async def spa_fallback(request, call_next):
+            """Catch-all: serve index.html for any route not matched by API routers."""
+            response = await call_next(request)
+            if response.status_code == 404 and not request.url.path.startswith("/auth") and \
+               not request.url.path.startswith("/qc") and not request.url.path.startswith("/sigma") and \
+               not request.url.path.startswith("/validation") and not request.url.path.startswith("/audit") and \
+               not request.url.path.startswith("/lots") and not request.url.path.startswith("/rag") and \
+               not request.url.path.startswith("/eqa") and not request.url.path.startswith("/lis") and \
+               not request.url.path.startswith("/settings") and not request.url.path.startswith("/docs") and \
+               not request.url.path.startswith("/openapi.json"):
+                index_path = dist / "index.html"
+                if index_path.exists():
+                    return FileResponse(str(index_path))
+            return response
 
 # ---------------------------------------------------------------------------
-# Root health check
+# Root — health check (API) or SPA index (standalone)
 # ---------------------------------------------------------------------------
 @app.get("/")
 def root() -> dict:
-    """Simple health-check endpoint."""
+    """Simple health-check endpoint. In standalone mode, serves the SPA."""
+    if _is_standalone():
+        dist = _get_dist_dir()
+        if dist.exists():
+            index_path = dist / "index.html"
+            if index_path.exists():
+                return FileResponse(str(index_path))
     return {"status": "ok", "app": "LabQC"}

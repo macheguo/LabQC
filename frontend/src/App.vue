@@ -14,6 +14,7 @@ import {
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
+  FlaskConical,
 } from 'lucide-vue-next'
 
 const { t } = useI18n()
@@ -28,6 +29,7 @@ const navItems = [
   { to: '/sigma', key: 'nav.sigmaAnalysis', icon: TrendingUp },
   { to: '/validation', key: 'nav.validation', icon: ClipboardCheck },
   { to: '/audit', key: 'nav.auditTrail', icon: Shield },
+  { to: '/eqa', key: 'nav.eqa', icon: FlaskConical },
   { to: '/lots', key: 'nav.lotRegistry', icon: Package },
   { to: '/regulatory', key: 'nav.regulatory', icon: BookOpen },
   { to: '/learn', key: 'nav.learn', icon: GraduationCap },
@@ -49,7 +51,7 @@ function toggleSidebar() {
 
 <template>
   <div class="app-shell">
-    <aside class="sidebar" :class="{ 'sidebar--collapsed': sidebarCollapsed }">
+    <aside v-if="route.name !== 'login'" class="sidebar" :class="{ 'sidebar--collapsed': sidebarCollapsed }">"
       <div class="sidebar-header">
         <img v-if="!sidebarCollapsed" src="@/assets/ksc-logo.svg" alt="LabQC" class="logo-img" />
         <span v-else class="logo-icon">LQ</span>

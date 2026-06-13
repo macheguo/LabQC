@@ -3,89 +3,77 @@
 
 <template>
   <div class="learn-content">
-    <h1>Chapter 1: Introduction to Quality Control in PCR Labs</h1>
-    <p class="chapter-subtitle">Understanding why QC matters and how controls protect patient outcomes.</p>
+    <h1>第一章：PCR实验室质量控制入门</h1>
+    <p class="chapter-subtitle">理解质控为何重要，以及质控品如何守护患者诊疗结果。</p>
 
-    <h2>What Is Quality Control?</h2>
+    <h2>什么是质量控制？</h2>
     <p>
-      Quality Control (QC) in clinical laboratories is a set of systematic procedures designed to monitor and evaluate
-      the analytical processes that produce patient results. In PCR-based molecular diagnostics, QC ensures that every
-      test run produces results that are accurate, precise, and clinically meaningful.
+      临床实验室的质量控制（Quality Control, QC）是一套系统化的程序，用于监控和评价产生患者结果的
+      分析过程。在基于PCR的分子诊断中，QC 确保每一次检测运行产出的结果都是准确、精密且有临床意义的。
     </p>
     <p>
-      Without rigorous QC, a laboratory cannot distinguish between a genuine patient result and one caused by reagent
-      degradation, instrument drift, operator error, or environmental fluctuation. QC is not optional — it is a
-      fundamental requirement of every accredited diagnostic laboratory worldwide.
+      如果没有严格的QC，实验室无法区分真实的患者结果与由试剂降解、仪器漂移、操作人员失误或环境波动
+      造成的假性结果。QC 不是可选操作——它是全球每一家获得认可的诊断实验室的基本要求。
     </p>
 
-    <h2>Why QC Matters in Diagnostic Labs</h2>
+    <h2>为什么QC在诊断实验室中至关重要</h2>
     <p>
-      Diagnostic PCR assays directly inform clinical decisions: whether a patient has an infectious disease, whether a
-      transplant recipient is experiencing rejection, or whether a cancer biomarker is rising. A false negative can
-      delay life-saving treatment. A false positive can lead to unnecessary interventions, patient anxiety, and wasted
-      healthcare resources.
+      诊断性PCR检测直接影响临床决策：患者是否患有传染病、移植受体是否发生排斥反应、癌症标志物是否
+      在升高。一个假阴性结果可能延误救命的治疗；一个假阳性可能导致不必要的干预、患者焦虑和医疗资源浪费。
     </p>
     <p>
-      QC acts as the safety net between the analytical instrument and the patient report. By running known control
-      materials alongside patient samples, the laboratory can verify that the entire analytical system — from nucleic
-      acid extraction through amplification and detection — is performing within acceptable limits.
+      QC 是分析仪器与患者报告之间的安全网。通过在患者样本旁检测已知质控品，实验室可以验证整个分析系统
+      ——从核酸提取到扩增再到检测——是否在可接受的限值内运行。
     </p>
 
     <div class="info-box">
-      <strong>Key principle:</strong> A QC failure means the analytical system cannot be trusted. Patient results from
-      that run should not be reported until the root cause is identified and resolved.
+      <strong>核心原则：</strong>QC失败意味着分析系统不可信赖。在找到并解决根本原因之前，不应报告
+      该批次的患者结果。
     </div>
 
-    <h2>The Role of Controls: L1, L2, and L3</h2>
+    <h2>质控品的作用：L1、L2 和 L3</h2>
     <p>
-      In quantitative PCR QC, laboratories typically run multiple levels of control materials to assess performance
-      across the clinically relevant measurement range:
+      在定量PCR QC中，实验室通常运行多个水平的质控品，以评估跨越临床相关测量范围的性能：
     </p>
     <ul>
       <li>
-        <strong>Level 1 (L1) — Low positive control:</strong> Contains a low concentration of the target analyte,
-        near the clinical decision point. This control is most sensitive to changes in assay sensitivity and is
-        critical for detecting shifts that could cause false negatives.
+        <strong>水平1（L1）——低值阳性质控品：</strong>含有低浓度的目标分析物，接近临床决策点。
+        该质控品对检测灵敏度的变化最为敏感，对发现可能导致假阴性的偏移至关重要。
       </li>
       <li>
-        <strong>Level 2 (L2) — Mid-range control:</strong> Contains a moderate concentration of target, representing
-        the middle of the reportable range. L2 monitors overall assay stability and is the most commonly used single
-        control level.
+        <strong>水平2（L2）——中值质控品：</strong>含有中等浓度的目标物，代表可报告范围的中间区段。
+        L2 用于监测整体检测稳定性，是最常用的单一质控水平。
       </li>
       <li>
-        <strong>Level 3 (L3) — High positive control:</strong> Contains a high concentration of target, near the upper
-        end of the linear range. L3 helps detect issues with amplification efficiency at high template loads and
-        monitors linearity.
+        <strong>水平3（L3）——高值阳性质控品：</strong>含有高浓度的目标物，接近线性范围的上限。
+        L3 有助于发现高模板量下扩增效率的问题，并监测线性。
       </li>
     </ul>
     <p>
-      Running multiple levels provides a more complete picture of assay performance than any single control can offer.
-      A shift detected only at L1 but not L2 or L3 suggests a sensitivity problem, while a shift across all levels
-      suggests a systematic error such as calibration drift.
+      运行多个水平能够比任何单一质控品更全面地反映检测性能。仅在L1发现而L2、L3未检出的偏移，
+      提示为灵敏度问题；而所有水平同时偏移则提示系统误差，如校准漂移。
     </p>
 
-    <h2>What Ct Values Represent</h2>
+    <h2>Ct值的含义</h2>
     <p>
-      The <strong>Ct value</strong> (cycle threshold, also written as Cq for quantification cycle) is the PCR cycle
-      number at which the fluorescence signal crosses a defined threshold. It is the primary quantitative output of
-      real-time PCR.
+      <strong>Ct值</strong>（循环阈值，也写作Cq，即定量循环数）是荧光信号超过设定阈值时的PCR循环数。
+      它是实时PCR的主要定量输出指标。
     </p>
     <p>
-      Ct values are inversely proportional to the amount of target nucleic acid in the sample:
+      Ct值与样本中目标核酸的含量呈反比关系：
     </p>
     <ul>
-      <li>A <strong>low Ct</strong> (e.g., 15-20) indicates a high concentration of target — the signal rises early.</li>
-      <li>A <strong>high Ct</strong> (e.g., 35-40) indicates a low concentration — more amplification cycles are needed before the signal is detectable.</li>
-      <li>An <strong>undetermined Ct</strong> means the fluorescence never crossed the threshold within the allotted cycles, suggesting the target is absent or below the limit of detection.</li>
+      <li><strong>低Ct值</strong>（如 15-20）表示目标物浓度高——信号很早出现。</li>
+      <li><strong>高Ct值</strong>（如 35-40）表示浓度低——需要更多扩增循环才能检测到信号。</li>
+      <li><strong>未测定（Undetermined）</strong>表示荧光在规定的循环数内从未越过阈值，提示目标物不存在或低于检测限。</li>
     </ul>
     <p>
-      In QC, we track the Ct values of control materials over time. Because the controls have a known, fixed
-      concentration, their Ct values should remain stable from run to run. When they drift or jump, something in the
-      analytical system has changed.
+      在QC中，我们跟踪质控品在不同时间的Ct值。由于质控品具有已知的固定浓度，其Ct值在不同批次间应保持稳定。
+      当它们发生漂移或跳变时，说明分析系统中的某个环节发生了变化。
     </p>
 
     <pre class="diagram">
-Ct value vs. Target concentration:
+Ct值 与 目标物浓度的关系：
 
   Ct
   40 |  *
@@ -95,67 +83,64 @@ Ct value vs. Target concentration:
   20 |              *
   15 |                 *
      +-------------------------
-       Low              High
-         Target concentration
+       低              高
+          目标物浓度
 
-  Note: Relationship is inversely logarithmic.
-  A 1-Ct shift represents approximately a 2-fold
-  change in target quantity.
+  注意：关系为反比对数关系。
+  Ct值相差1个单位，大致对应目标物数量相差约2倍。
     </pre>
 
-    <h2>How QC Ensures Patient Safety</h2>
+    <h2>QC 如何保障患者安全</h2>
     <p>
-      QC operates on a simple but powerful principle: <strong>if the controls fail, the patient results cannot be
-      trusted.</strong> This is implemented through a daily workflow:
+      QC 遵循一个简单而强大的原则：<strong>质控品不合格，则患者结果不可信赖。</strong>通过以下日常工作流程实现：
     </p>
     <ol>
-      <li>Before or alongside patient testing, the laboratory processes control materials of known concentration.</li>
-      <li>The resulting Ct values are plotted on a Levey-Jennings chart and evaluated against statistical rules (Westgard rules).</li>
-      <li>If all controls pass, the run is accepted and patient results can be reported.</li>
-      <li>If any control triggers a rejection rule, the run is flagged, patient results are held, and the laboratory investigates the root cause.</li>
-      <li>Corrective action is documented, the issue is resolved, and the run is repeated before results are released.</li>
+      <li>在患者检测之前或同时，实验室处理已知浓度的质控品。</li>
+      <li>将得出的Ct值绘制到Levey-Jennings图上，并用统计规则（Westgard规则）进行评估。</li>
+      <li>若所有质控品通过，则该批次被接受，患者结果可以报告。</li>
+      <li>若任何质控品触发了拒绝规则，则标记该批次，搁置患者结果，实验室调查根本原因。</li>
+      <li>纠正措施记录在案，问题解决后重新运行检测，再发布结果。</li>
     </ol>
 
-    <h2>Regulatory Requirements</h2>
+    <h2>法规要求</h2>
     <p>
-      QC is not just good practice — it is mandated by every major regulatory framework:
+      QC 不仅是良好实践——它是所有主要法规框架的强制要求：
     </p>
 
     <table>
       <thead>
         <tr>
-          <th>Standard</th>
-          <th>Requirement</th>
+          <th>标准/法规</th>
+          <th>要求</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>ISO 15189:2022</td>
-          <td>Section 7.7.1 requires laboratories to implement QC procedures that verify the attainment of intended quality of results.</td>
+          <td>第7.7.1条要求实验室实施QC程序，验证结果质量的预期达到情况。</td>
         </tr>
         <tr>
-          <td>CLIA (US)</td>
-          <td>42 CFR 493.1256 mandates that laboratories follow manufacturers' QC instructions and run controls at frequencies sufficient to detect clinically relevant errors.</td>
+          <td>CLIA (美国)</td>
+          <td>42 CFR 493.1256要求实验室遵循制造商的QC说明书，并以足以检出有临床意义错误的频率运行质控品。</td>
         </tr>
         <tr>
-          <td>CE-IVD (EU)</td>
-          <td>IVDR 2017/746 requires manufacturers to specify QC procedures, and laboratories must implement them.</td>
+          <td>CE-IVD (欧盟)</td>
+          <td>IVDR 2017/746要求制造商规定QC程序，实验室必须加以实施。</td>
         </tr>
         <tr>
-          <td>CDSCO (India)</td>
-          <td>MD/IVD rules require compliance with ISO 15189 for clinical laboratories.</td>
+          <td>CDSCO (印度)</td>
+          <td>MD/IVD规则要求临床实验室符合ISO 15189标准。</td>
         </tr>
         <tr>
-          <td>CAP (US)</td>
-          <td>College of American Pathologists checklists require documented QC with evidence of corrective action for failures.</td>
+          <td>CAP (美国)</td>
+          <td>美国病理学家学会清单要求有记录的质量控制，并对不合格结果提供纠正措施证据。</td>
         </tr>
       </tbody>
     </table>
 
     <div class="info-box">
-      <strong>Bottom line:</strong> QC is the bridge between analytical measurement and clinical trust. LabQC
-      automates the statistical evaluation, charting, and documentation so that laboratory professionals can focus
-      on interpretation and patient care.
+      <strong>核心结论：</strong>QC 是分析测量与临床信任之间的桥梁。LabQC
+      将统计评估、图表绘制和文件记录自动化，使实验室专业人员能够专注于结果解读和患者护理。
     </div>
   </div>
 </template>

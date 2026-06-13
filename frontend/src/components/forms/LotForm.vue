@@ -1,6 +1,9 @@
 <script setup>
 import { reactive, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Button } from '@/components/ui/button'
+
+const { t } = useI18n()
 
 const props = defineProps({
   type: {
@@ -63,32 +66,32 @@ function handleCancel() {
 <template>
   <form class="lot-form" @submit.prevent="handleSubmit">
     <div class="lot-form__title">
-      {{ type === 'reagent' ? 'Add Reagent Lot' : 'Add Control Lot' }}
+      {{ type === 'reagent' ? t('lots.addReagentLotTitle') : t('lots.addControlLotTitle') }}
     </div>
 
     <div class="lot-form__fields">
       <!-- Reagent fields -->
       <template v-if="type === 'reagent'">
         <div class="form-field">
-          <label class="form-label">Assay Name</label>
+          <label class="form-label">{{ t('lots.assayName') }}</label>
           <input
             v-model="reagentForm.assay_name"
             type="text"
             class="form-input"
-            placeholder="e.g. TSH, HbA1c"
+            :placeholder="t('lots.assayNamePlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Lot Number</label>
+          <label class="form-label">{{ t('lots.lotNumber') }}</label>
           <input
             v-model="reagentForm.lot_number"
             type="text"
             class="form-input"
-            placeholder="e.g. R-2024-001"
+            :placeholder="t('lots.lotNumberPlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Expiry Date</label>
+          <label class="form-label">{{ t('lots.expiryDate') }}</label>
           <input
             v-model="reagentForm.expiry_date"
             type="date"
@@ -96,7 +99,7 @@ function handleCancel() {
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Open Date</label>
+          <label class="form-label">{{ t('lots.openDate') }}</label>
           <input
             v-model="reagentForm.open_date"
             type="date"
@@ -108,54 +111,54 @@ function handleCancel() {
       <!-- Control fields -->
       <template v-else>
         <div class="form-field">
-          <label class="form-label">Control Name</label>
+          <label class="form-label">{{ t('lots.controlName') }}</label>
           <input
             v-model="controlForm.control_name"
             type="text"
             class="form-input"
-            placeholder="e.g. Normal Control L1"
+            :placeholder="t('lots.controlNamePlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Manufacturer</label>
+          <label class="form-label">{{ t('lots.manufacturer') }}</label>
           <input
             v-model="controlForm.manufacturer"
             type="text"
             class="form-input"
-            placeholder="e.g. Bio-Rad"
+            :placeholder="t('lots.manufacturerPlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Lot Number</label>
+          <label class="form-label">{{ t('lots.lotNumber') }}</label>
           <input
             v-model="controlForm.lot_number"
             type="text"
             class="form-input"
-            placeholder="e.g. C-2024-001"
+            :placeholder="t('lots.lotNumberPlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Assigned Mean</label>
+          <label class="form-label">{{ t('lots.assignedMean') }}</label>
           <input
             v-model="controlForm.assigned_mean"
             type="number"
             step="any"
             class="form-input"
-            placeholder="0.00"
+            :placeholder="t('lots.assignedMeanPlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Assigned SD</label>
+          <label class="form-label">{{ t('lots.assignedSd') }}</label>
           <input
             v-model="controlForm.assigned_sd"
             type="number"
             step="any"
             class="form-input"
-            placeholder="0.00"
+            :placeholder="t('lots.assignedSdPlaceholder')"
           />
         </div>
         <div class="form-field">
-          <label class="form-label">Expiry Date</label>
+          <label class="form-label">{{ t('lots.expiryDate') }}</label>
           <input
             v-model="controlForm.expiry_date"
             type="date"
@@ -167,10 +170,10 @@ function handleCancel() {
 
     <div class="lot-form__actions">
       <Button variant="ghost" size="sm" type="button" @click="handleCancel">
-        Cancel
+        {{ t('shared.cancel') }}
       </Button>
       <Button size="sm" type="submit" :disabled="!isValid">
-        Save Lot
+        {{ t('lots.saveLot') }}
       </Button>
     </div>
   </form>

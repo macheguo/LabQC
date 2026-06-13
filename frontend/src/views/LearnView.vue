@@ -12,6 +12,7 @@ import ChapterAudit from '@/components/learn/ChapterAudit.vue'
 import ChapterUsingLabQC from '@/components/learn/ChapterUsingLabQC.vue'
 import ChapterExamples from '@/components/learn/ChapterExamples.vue'
 import ChapterExperimentDesign from '@/components/learn/ChapterExperimentDesign.vue'
+import ChapterISO15189 from '@/components/learn/ChapterISO15189.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -26,6 +27,7 @@ const chapters = computed(() => [
   { id: 'using-openqc', number: 6, title: t('learn.chapterList.usingLabQC'), component: ChapterUsingLabQC },
   { id: 'examples', number: 7, title: t('learn.chapterList.examples'), component: ChapterExamples },
   { id: 'experiment-design', number: 8, title: t('learn.chapterList.experimentDesign'), component: ChapterExperimentDesign },
+  { id: 'iso15189', number: 9, title: t('learn.chapterList.iso15189'), component: ChapterISO15189 },
 ])
 
 const activeChapter = ref(route.query.chapter || 'intro')

@@ -50,10 +50,10 @@ function handleSubmit() {
 <template>
   <div class="sigma-form">
     <div class="sigma-form__header">
-      <span class="sigma-form__title">Sigma Inputs</span>
+      <span class="sigma-form__title">Sigma 输入</span>
       <Button variant="ghost" size="sm" @click="addRow">
         <Plus :size="16" :stroke-width="1.75" />
-        <span>Add Row</span>
+        <span>添加行</span>
       </Button>
     </div>
 
@@ -61,10 +61,10 @@ function handleSubmit() {
       <table class="sigma-form__table">
         <thead>
           <tr>
-            <th>Assay</th>
-            <th>TEa %</th>
-            <th>Bias %</th>
-            <th>CV %</th>
+            <th>检测项目</th>
+            <th>TEa (%)</th>
+            <th>Bias (%)</th>
+            <th>CV (%)</th>
             <th class="sigma-form__th-action"></th>
           </tr>
         </thead>
@@ -75,7 +75,7 @@ function handleSubmit() {
                 v-model="row.assay"
                 type="text"
                 class="sigma-form__input sigma-form__input--text"
-                placeholder="e.g. Glucose"
+                placeholder="如：葡萄糖"
               />
             </td>
             <td>
@@ -112,7 +112,7 @@ function handleSubmit() {
                 v-if="rows.length > 1"
                 class="sigma-form__remove-btn"
                 @click="removeRow(i)"
-                title="Remove row"
+                title="删除行"
               >
                 <X :size="16" :stroke-width="1.75" />
               </button>
@@ -124,7 +124,7 @@ function handleSubmit() {
 
     <div class="sigma-form__actions">
       <Button :disabled="!isValid()" @click="handleSubmit">
-        Calculate Sigma
+        计算 Sigma
       </Button>
     </div>
   </div>

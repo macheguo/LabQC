@@ -4,232 +4,218 @@ import PlotlyNMEDxDiagram from './PlotlyNMEDxDiagram.vue'
 
 <template>
   <div class="learn-content">
-    <h1>Chapter 3: Six Sigma in the Laboratory</h1>
-    <p class="chapter-subtitle">Using Sigma metrics to objectively measure assay quality and design optimal QC strategies.</p>
+    <h1>第三章：实验室中的六西格玛</h1>
+    <p class="chapter-subtitle">运用 Sigma 指标客观衡量检测质量，设计最优的 QC 策略。</p>
 
-    <h2>What Six Sigma Means for Lab Quality</h2>
+    <h2>六西格玛对实验室质量的意义</h2>
     <p>
-      Six Sigma is a quality management methodology originally developed by Motorola in the 1980s and popularized by
-      General Electric. In manufacturing, Six Sigma aims for no more than 3.4 defects per million opportunities. When
-      applied to the clinical laboratory, it provides a universal metric for measuring how well an analytical method
-      performs relative to its quality requirements.
+      六西格玛最初是摩托罗拉在20世纪80年代提出、由通用电气推广的质量管理方法论。在制造业中，
+      六西格玛的目标是每百万次机会中缺陷不超过3.4个。当应用于临床实验室时，它提供了一个衡量
+      分析方法相对于其质量需求表现如何的通用指标。
     </p>
     <p>
-      The core idea is simple: compare the <strong>allowable total error</strong> (how much error is acceptable) to the
-      <strong>actual error</strong> (how much error the method actually produces). The ratio, expressed as a Sigma
-      metric, tells you how many standard deviations of "safety margin" exist between your method's performance and the
-      point at which it would produce clinically unacceptable results.
+      核心理念很简单：将<strong>允许总误差</strong>（可接受多少误差）与<strong>实际误差</strong>
+      （方法实际产生多少误差）进行比较。该比值以 Sigma 指标表达，告诉你在方法的实际表现与产生
+      临床不可接受结果之间，还有多少个标准差的"安全裕度"。
     </p>
     <p>
-      A higher Sigma value means a more reliable method with a larger safety margin. A lower Sigma value means the
-      method is operating close to its quality limit and requires more stringent QC to catch errors before they
-      affect patient results.
+      Sigma值越高，意味着方法越可靠、安全裕度越大；Sigma值越低，意味着方法正在接近其质量限值运行，
+      需要更严格的QC来在误差影响患者结果前捕获它们。
     </p>
 
-    <h2>The Sigma Metric Formula</h2>
+    <h2>Sigma 指标计算公式</h2>
     <p>
-      The Sigma metric for a laboratory method is calculated as:
+      实验室方法的 Sigma 指标按下式计算：
     </p>
     <pre class="diagram">
              TEa - |Bias|
       sigma = -----------
                  CV
 
-  Where:
-    TEa   = Total allowable error (%)
-    Bias  = Systematic error / inaccuracy (%)
-    CV    = Coefficient of variation / imprecision (%)
+  其中:
+    TEa   = 允许总误差 (%)
+    Bias  = 系统误差 / 不准确度 (%)
+    CV    = 变异系数 / 不精密度 (%)
     </pre>
 
-    <h3>Understanding Each Component</h3>
+    <h3>理解每个组成部分</h3>
     <ul>
       <li>
-        <strong>TEa (Total Allowable Error):</strong> The maximum amount of error that is acceptable for a given
-        analyte without affecting clinical decision-making. TEa values are established by regulatory bodies, biological
-        variation databases, and expert consensus. For example, if TEa for a SARS-CoV-2 Ct value is 15%, the method
-        must produce results within 15% of the true value.
+        <strong>TEa（允许总误差）：</strong>对于某个分析项目，在不影响临床决策的前提下可接受的最大误差量。
+        TEa值由法规机构、生物学变异数据库和专家共识制定。例如，若某新冠病毒Ct值的TEa为15%，
+        则方法必须产生在真值15%以内的结果。
       </li>
       <li>
-        <strong>Bias:</strong> The systematic error component — the consistent difference between the method's average
-        result and the true (reference) value. Bias is typically estimated from proficiency testing (external QA),
-        method comparison studies, or recovery experiments. It is expressed as a percentage.
+        <strong>Bias（偏倚）：</strong>系统误差分量——方法平均值与真值（参考值）之间的持续差异。
+        偏倚通常通过能力验证（外部质量评估）、方法比对研究或回收实验来估算，以百分比表示。
       </li>
       <li>
-        <strong>CV (Coefficient of Variation):</strong> The random error component — the imprecision of the method
-        expressed as a percentage of the mean. CV is calculated from QC data as <code>(SD / mean) x 100</code>. It
-        represents the run-to-run variability of the method.
+        <strong>CV（变异系数）：</strong>随机误差分量——方法的不精密度，以占均值的百分比表示。
+        CV 由QC数据计算：<code>(SD / 均值) × 100</code>。它代表方法在批次间的变异性。
       </li>
     </ul>
 
-    <h2>Sigma Classification Bands</h2>
+    <h2>Sigma 分级表</h2>
     <p>
-      Sigma values are classified into performance bands that directly inform QC design decisions:
+      Sigma值被分类为不同的性能等级，直接指导QC设计决策：
     </p>
 
     <table>
       <thead>
         <tr>
           <th>Sigma</th>
-          <th>Classification</th>
-          <th>Defect Rate</th>
-          <th>QC Implications</th>
+          <th>分级</th>
+          <th>缺陷率</th>
+          <th>QC 建议</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>&ge; 6</strong></td>
-          <td style="color: #43A047;">World Class</td>
-          <td>3.4 per million</td>
-          <td>Minimal QC needed. Simple rules (1-3s) with N=2 controls suffice.</td>
+          <td style="color: #43A047;">世界级 (World Class)</td>
+          <td>每百万3.4</td>
+          <td>只需少量QC。1-3s规则搭配N=2个质控品即可。</td>
         </tr>
         <tr>
           <td><strong>5 - 6</strong></td>
-          <td style="color: #66BB6A;">Excellent</td>
-          <td>233 per million</td>
-          <td>Standard QC. Westgard multi-rules with N=2 controls.</td>
+          <td style="color: #66BB6A;">优秀 (Excellent)</td>
+          <td>每百万233</td>
+          <td>标准QC。Westgard多规则搭配N=2个质控品。</td>
         </tr>
         <tr>
           <td><strong>4 - 5</strong></td>
-          <td style="color: #F9A825;">Good</td>
-          <td>6,210 per million</td>
-          <td>Enhanced QC required. Multi-rules with N=4 controls recommended.</td>
+          <td style="color: #F9A825;">良好 (Good)</td>
+          <td>每百万6,210</td>
+          <td>需要加强QC。建议多规则搭配N=4个质控品。</td>
         </tr>
         <tr>
           <td><strong>3 - 4</strong></td>
-          <td style="color: #FF9800;">Marginal</td>
-          <td>66,807 per million</td>
-          <td>Maximum QC needed. Multi-rules with N=4 and tight limits. Consider method improvement.</td>
+          <td style="color: #FF9800;">临界 (Marginal)</td>
+          <td>每百万66,807</td>
+          <td>需要最大力度QC。N=4多规则并收紧限值。考虑改进方法。</td>
         </tr>
         <tr>
           <td><strong>2 - 3</strong></td>
-          <td style="color: #E53935;">Poor</td>
-          <td>308,538 per million</td>
-          <td>Unacceptable for routine use without significant improvement. May need method change.</td>
+          <td style="color: #E53935;">差 (Poor)</td>
+          <td>每百万308,538</td>
+          <td>未显著改进前不可常规使用。可能需要更换方法。</td>
         </tr>
         <tr>
           <td><strong>&lt; 2</strong></td>
-          <td style="color: #B71C1C;">Unacceptable</td>
-          <td>&gt;308,538 per million</td>
-          <td>Method cannot meet quality requirements. Replace or fundamentally redesign.</td>
+          <td style="color: #B71C1C;">不可接受 (Unacceptable)</td>
+          <td>&gt;每百万308,538</td>
+          <td>方法不能满足质量要求。更换或从根本上重新设计。</td>
         </tr>
       </tbody>
     </table>
 
-    <h2>The NMEDx (Normalized Method Decision) Chart</h2>
+    <h2>NMEDx（归一化方法决策）图</h2>
     <p>
-      The NMEDx chart is a visual tool that plots a method's performance in a two-dimensional space with imprecision
-      (CV as a fraction of TEa) on the x-axis and bias (as a fraction of TEa) on the y-axis. This normalization allows
-      methods with different TEa values to be compared on the same chart.
+      NMEDx图是一种可视化工具，将方法的性能绘制在二维空间中：x轴为不精密度（CV占TEa的比例），
+      y轴为偏倚（占TEa的比例）。这一归一化处理使不同TEa值的方法能在同一张图上进行比较。
     </p>
     <PlotlyNMEDxDiagram
       :assays="[
-        { name: 'SARS-CoV-2', cvTEa: 0.08, biasTEa: 0.15, sigma: 5.8 },
-        { name: 'Influenza A', cvTEa: 0.12, biasTEa: 0.30, sigma: 4.2 },
-        { name: 'RSV', cvTEa: 0.18, biasTEa: 0.45, sigma: 2.8 },
-        { name: 'HBV Viral Load', cvTEa: 0.05, biasTEa: 0.10, sigma: 6.5 },
-        { name: 'HCV Genotype', cvTEa: 0.15, biasTEa: 0.35, sigma: 3.5 },
+        { name: '新冠病毒', cvTEa: 0.08, biasTEa: 0.15, sigma: 5.8 },
+        { name: '甲型流感', cvTEa: 0.12, biasTEa: 0.30, sigma: 4.2 },
+        { name: '呼吸道合胞病毒', cvTEa: 0.18, biasTEa: 0.45, sigma: 2.8 },
+        { name: 'HBV 病毒载量', cvTEa: 0.05, biasTEa: 0.10, sigma: 6.5 },
+        { name: 'HCV 基因分型', cvTEa: 0.15, biasTEa: 0.35, sigma: 3.5 },
       ]"
     />
 
     <p>
-      The NMEDx chart in LabQC color-codes each plotted method according to its Sigma band, making it immediately
-      clear which assays are performing well and which need attention.
+      LabQC 中的 NMEDx 图根据每个方法的 Sigma 等级进行颜色编码，让哪些项目运行良好、
+      哪些需要关注一目了然。
     </p>
 
-    <h2>How Sigma Score Drives QC Design</h2>
+    <h2>Sigma 值如何驱动 QC 设计</h2>
     <p>
-      The practical power of the Sigma metric is that it directly determines which QC rules and how many controls are
-      needed. High-Sigma methods need less QC because errors large enough to affect patients are extremely rare.
-      Low-Sigma methods need aggressive QC because the method is operating close to its quality limit.
+      Sigma指标的实用价值在于，它直接决定了需要哪些QC规则以及需要多少个质控品。高Sigma方法
+      需要的QC较少，因为足以影响患者的误差极其罕见。低Sigma方法则需要严格的QC，
+      因为方法正在接近其质量限值运行。
     </p>
 
     <table>
       <thead>
         <tr>
           <th>Sigma</th>
-          <th>Recommended QC Rules</th>
-          <th>Controls per Run</th>
-          <th>Frequency</th>
+          <th>推荐 QC 规则</th>
+          <th>每批次质控品数</th>
+          <th>频次</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td><strong>&ge; 6</strong></td>
-          <td>1-3s only</td>
+          <td>仅 1-3s</td>
           <td>N = 2</td>
-          <td>Standard (every run or daily)</td>
+          <td>标准（每批次或每日）</td>
         </tr>
         <tr>
           <td><strong>5 - 6</strong></td>
           <td>1-3s / 2-2s / R-4s</td>
           <td>N = 2</td>
-          <td>Standard</td>
+          <td>标准</td>
         </tr>
         <tr>
           <td><strong>4 - 5</strong></td>
           <td>1-3s / 2-2s / R-4s / 4-1s</td>
           <td>N = 4</td>
-          <td>Every run</td>
+          <td>每批次</td>
         </tr>
         <tr>
           <td><strong>3 - 4</strong></td>
-          <td>Full Westgard multi-rules</td>
+          <td>全部 Westgard 多规则</td>
           <td>N = 4</td>
-          <td>Every run, with repeat testing</td>
+          <td>每批次，加重复检测</td>
         </tr>
         <tr>
           <td><strong>&lt; 3</strong></td>
-          <td>QC alone is insufficient</td>
-          <td>N/A</td>
-          <td>Method improvement required before QC design</td>
+          <td>单独QC不足够</td>
+          <td>不适用</td>
+          <td>需先改进方法再设计QC</td>
         </tr>
       </tbody>
     </table>
 
     <div class="info-box">
-      <strong>Practical tip:</strong> When LabQC calculates the Sigma metric for your assay, it automatically
-      recommends the appropriate QC rules and control strategy based on the table above. Use the Sigma Analysis
-      module to evaluate each assay in your laboratory.
+      <strong>实用提示：</strong>LabQC 在计算出检测项目的 Sigma 指标后，自动根据上表
+      推荐相应的QC规则和质控策略。请用 Sigma 分析模块评估实验室中的每项检测。
     </div>
 
-    <h2>TEa Sources</h2>
+    <h2>TEa 的来源</h2>
     <p>
-      Selecting the appropriate TEa is critical — it defines the quality goal against which the Sigma metric is
-      calculated. Common sources include:
+      选择合适的TEa至关重要——它定义了计算 Sigma 指标所依据的质量目标。常见来源包括：
     </p>
     <ul>
       <li>
-        <strong>CLIA (Clinical Laboratory Improvement Amendments):</strong> The US federal program publishes fixed
-        allowable error limits for regulated analytes. These are widely used as a baseline, though they may be
-        broader than biologically derived goals.
+        <strong>CLIA（临床实验室改进修正案）：</strong>美国联邦计划为受监管的分析项目
+        公布固定的允许误差限值。这些被广泛用作基线，不过可能比基于生物学导出的目标更为宽泛。
       </li>
       <li>
-        <strong>Biological Variation Databases:</strong> TEa can be derived from within-subject and between-subject
-        biological variation using the formula <code>TEa = 1.65 * CV_i + 0.25 * (CV_i² + CV_g²)^0.5</code>, where
-        CV_i is within-individual variation and CV_g is between-individual variation. The European Federation of
-        Clinical Chemistry (EFLM) maintains a comprehensive biological variation database.
+        <strong>生物学变异数据库：</strong>TEa可由个体内和个体间生物学变异导出，公式为
+        <code>TEa = 1.65 × CV_i + 0.25 × (CV_i² + CV_g²)^0.5</code>，其中 CV_i 为个体内变异、
+        CV_g 为个体间变异。欧洲临床化学联合会(EFLM)维护着全面的生物学变异数据库。
       </li>
       <li>
-        <strong>CDSCO (Central Drugs Standard Control Organisation):</strong> India's regulatory body references
-        ISO 15189 and manufacturer-specified performance requirements. For IVD devices marketed in India, the
-        manufacturer's claimed performance specifications serve as the TEa benchmark.
+        <strong>CDSCO（印度中央药物标准控制组织）：</strong>印度的法规机构参考ISO 15189和
+        制造商声明的性能要求。对于在印度上市的IVD设备，制造商声明的性能规格作为TEa基准。
       </li>
       <li>
-        <strong>Clinical Decision Limits:</strong> For some analytes, TEa is derived from the clinical decision
-        point — the concentration at which a diagnostic decision changes. The allowable error must be small enough
-        that a result near the decision point is reliably classified.
+        <strong>临床决策限值：</strong>对于某些分析项目，TEa由临床决策点导出——即诊断决策发生
+        改变的浓度。允许误差必须足够小，使接近决策点的结果能够被可靠分类。
       </li>
       <li>
-        <strong>Expert Consensus (e.g., RCPA, RiliBaK):</strong> Professional organizations in various countries
-        publish consensus-based quality goals. The Royal College of Pathologists of Australasia (RCPA) and the
-        German Medical Association (RiliBaK) guidelines are commonly referenced.
+        <strong>专家共识（如 RCPA、RiliBaK）：</strong>各国专业组织发布共识质量目标。
+        澳大利亚皇家病理学家学会(RCPA)和德国医学会(RiliBaK)指南被广泛引用。
       </li>
     </ul>
 
     <div class="warning-box">
-      <strong>Important:</strong> Always document the source of your TEa values. During regulatory audits, you will
-      need to justify why a particular TEa was chosen for each analyte. Using a recognized published source
-      (CLIA, biological variation, or manufacturer claims) provides the strongest defensible position.
+      <strong>重要提示：</strong>始终记录TEa值的来源。在法规审查中，你需要为每个分析项目
+      所选择的TEa提供理由。使用公认的已出版来源（CLIA、生物学变异或制造商声明）可提供最强的
+      可辩护依据。
     </div>
   </div>
 </template>

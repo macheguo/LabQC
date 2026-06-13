@@ -7,6 +7,7 @@ export default {
     sigmaAnalysis: 'Sigma 分析',
     validation: '方法验证',
     auditTrail: '审计追踪',
+    eqa: '室间质评',
     lotRegistry: '批号管理',
     regulatory: '法规助手',
     learn: '学习中心',
@@ -170,6 +171,7 @@ export default {
     reportTitle: '审计追踪报告',
     reportSubtitle: '{count} 条目',
     dismiss: '关闭',
+    noEntries: '暂无审计记录',
   },
 
   // Lot Registry
@@ -200,6 +202,20 @@ export default {
     noLots: '暂无{type}批号记录。',
     addFirstLot: '添加第一个批号',
     dismiss: '关闭',
+    addReagentLotTitle: '添加试剂批号',
+    addControlLotTitle: '添加质控品批号',
+    assayName: '检测项目名称',
+    assayNamePlaceholder: '如：TSH、HbA1c',
+    lotNumberPlaceholder: '如：R-2024-001',
+    expiryDate: '有效期',
+    openDate: '开瓶日期',
+    saveLot: '保存批号',
+    controlNamePlaceholder: '如：正常水平质控品 L1',
+    manufacturerPlaceholder: '如：Bio-Rad',
+    assignedMean: '指定均值',
+    assignedMeanPlaceholder: '0.00',
+    assignedSd: '指定标准差',
+    assignedSdPlaceholder: '0.00',
   },
 
   // Regulatory Assistant
@@ -236,6 +252,7 @@ export default {
       validation: '方法验证基础',
       audit: '审计追踪与合规',
       experimentDesign: '实验设计与报告',
+      iso15189: 'ISO 15189:2022 质控合规指南',
       usingLabQC: 'LabQC 使用指南',
       examples: '实际案例参考',
     },
@@ -292,6 +309,26 @@ export default {
     contactPhonePlaceholder: '如：0755-8306XXXX',
     accreditation: '认证信息',
     accreditationPlaceholder: '如：ISO 15189:2022 / CAP',
+
+    // LIS integration
+    lisTitle: 'LIS 接口配置',
+    lisDesc: '通过 HL7 v2.x (MLLP) 协议接收检验信息系统数据。启用后将监听指定端口，接收 HL7 ORU^R01 消息。',
+    lisEnable: '启用 LIS 监听',
+    lisStatus: '状态',
+    lisHost: '监听地址',
+    lisPort: '监听端口',
+    lisSave: '保存配置',
+    lisRestart: '重启监听',
+    lisTestParse: '测试解析 HL7 消息',
+    lisTestParseDesc: '粘贴一段 HL7 v2.x 消息（从 MSH 开头），测试解析结果。',
+    lisTestParsePlaceholder: 'MSH|^~\\&|...\nPID|1|...\nOBR|1|...\nOBX|1|...',
+    lisTestParseBtn: '测试解析',
+    lisParseType: '消息类型',
+    lisParsePatient: '患者',
+    lisParseTest: '检测项目',
+    lisParseResults: '结果',
+    lisRecent: '最近接收消息',
+    loading: '加载中...',
   },
 
   // Shared components
@@ -339,5 +376,17 @@ export default {
   format: {
     date: 'YYYY年MM月DD日',
     datetime: 'YYYY年MM月DD日 HH:mm',
+  },
+
+  // Login
+  login: {
+    title: 'LabQC 登录',
+    subtitle: '医学实验室室内质控管理系统',
+    username: '用户名',
+    password: '密码',
+    usernamePlaceholder: '请输入用户名',
+    passwordPlaceholder: '请输入密码',
+    loginBtn: '登 录',
+    loggingIn: '登录中...',
   },
 }

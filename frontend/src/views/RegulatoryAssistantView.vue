@@ -7,10 +7,12 @@ import IngestionStatus from '@/components/rag/IngestionStatus.vue'
 import QueryInput from '@/components/rag/QueryInput.vue'
 import AnswerCard from '@/components/rag/AnswerCard.vue'
 import { Button } from '@/components/ui/button'
-import { MessageSquare } from 'lucide-vue-next'
+import { MessageSquare, Settings } from 'lucide-vue-next'
+import { useRouter } from 'vue-router'
 
 const { t } = useI18n()
 const store = useRAGStore()
+const router = useRouter()
 
 const isCorpusReady = () =>
   store.status && store.status.status === 'ready'
@@ -42,6 +44,15 @@ onMounted(() => {
       :title="t('regulatory.title')"
       :subtitle="t('regulatory.subtitle')"
     />
+
+    <!-- AI 模型未配置提示 -->
+    <div class="settings-tip">
+      <Settings :size="14" :stroke-width="1.75" />
+      <span>使用前请先配置 AI 模型（免费/付费均可，推荐 DeepSeek、通义千问）</span>
+      <Button variant="outline" size="sm" @click="router.push('/settings')">
+        前往配置
+      </Button>
+    </div>
 
     <div class="rag-content">
       <!-- Ingestion status -->
@@ -100,6 +111,21 @@ onMounted(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.settings-tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 28px;
+  background-color: color-mix(in srgb, var(--color-warning) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-warning) 15%, transparent);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.settings-tip span {
+  flex: 1;
 }
 
 .rag-content {

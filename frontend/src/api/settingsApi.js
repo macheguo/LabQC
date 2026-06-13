@@ -58,3 +58,43 @@ export async function updateLabProfile(profile) {
   })
   await throwIfError(res, 'Failed to save lab profile')
 }
+
+// ── LIS Config ──────────────────────────────────────────────
+
+export async function getLisConfig() {
+  const res = await fetch(`${BASE_URL}/lis/config`)
+  await throwIfError(res, 'Failed to load LIS config')
+  return res.json()
+}
+
+export async function updateLisConfig(config) {
+  const res = await fetch(`${BASE_URL}/lis/config`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(config),
+  })
+  await throwIfError(res, 'Failed to save LIS config')
+  return res.json()
+}
+
+export async function testParseHl7(rawMessage) {
+  const res = await fetch(`${BASE_URL}/lis/test-parse`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ raw_message: rawMessage }),
+  })
+  await throwIfError(res, 'Failed to test parse')
+  return res.json()
+}
+
+export async function restartLisListener() {
+  const res = await fetch(`${BASE_URL}/lis/restart`, { method: 'POST' })
+  await throwIfError(res, 'Failed to restart listener')
+  return res.json()
+}
+
+export async function getLisMessages(limit = 20) {
+  const res = await fetch(`${BASE_URL}/lis/messages?limit=${limit}`)
+  await throwIfError(res, 'Failed to load LIS messages')
+  return res.json()
+}

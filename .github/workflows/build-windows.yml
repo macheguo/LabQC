@@ -1,0 +1,45 @@
+name: Build LabQC Windows EXE
+
+on:
+  workflow_dispatch:  # Manual trigger from Actions tab
+  push:
+    paths:
+      - 'backend/**'
+      - 'run_labqc.py'
+      - 'requirements.txt'
+      - 'labqc.spec'
+      - 'frontend/dist/**'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pyinstaller
+
+      - name: Build frontend (if needed)
+        shell: pwsh
+        run: |
+          if (!(Test-Path "frontend/dist/index.html")) {
+            cd frontend
+            npm install
+            npx vite build --base=/
+            cd ..
+          }
+
+      - name: Build EXE with PyInstaller
+        run: pyinstaller labqc.spec --noconfirm
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LabQC_Windows_EXE
+          path: dist/LabQC/
+          retention-days: 7

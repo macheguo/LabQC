@@ -33,7 +33,7 @@ function handleSubmit() {
         v-model="question"
         type="text"
         class="query-input__field"
-        placeholder="Ask a regulatory question..."
+        placeholder="输入法规问题，如：ISO 15189 对质控频率的要求是什么？"
         :disabled="disabled || loading"
       />
     </div>
@@ -42,7 +42,7 @@ function handleSubmit() {
       type="submit"
       :disabled="disabled || loading || !question.trim()"
     >
-      {{ loading ? 'Searching...' : 'Ask' }}
+      {{ loading ? '搜索中...' : '提问' }}
     </Button>
   </form>
 </template>
